@@ -34,13 +34,9 @@ end
 
 function love.update(dt)
     if gameState == GAME_STATE.running then
-        if timer > 0 then
-            timer = timer - dt
-        else
+        timer = math.max(timer - dt, 0)
+        if timer == 0 then
             gameState = GAME_STATE.menu
-            if timer < 0 then
-                timer = 0
-            end
         end
     end
 end
