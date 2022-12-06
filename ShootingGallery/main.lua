@@ -1,36 +1,22 @@
 dofile("config.lua")
-dofile("utils.lua")
+Game = dofile("game.lua")
 
 function love.load()
-    gameFont = graphics.newFont(30)
+    game = Game:new()
     love.mouse.setVisible(false)
     sprites = loadSprites()
-    loadInitValues()
     target = { radius = 50 }
-    placeTarget()
+    game:placeTarget()
 end
 
 function love.update(dt)
-    if gameState == GAME_STATE.running then
-        timer = math.max(timer - dt, 0)
-        if timer == 0 then
-            gameState = GAME_STATE.menu
-        end
-    end
+    game:update(dt)
 end
 
 function love.draw()
-    graphics.setFont(gameFont)
-    drawBackground()
-    drawGameStateDependentContent()
-    drawCrosshair()
+    game:draw()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-    if button == MOUSE.middleClick then return end
-    if gameState == GAME_STATE.menu then
-        if button == MOUSE.leftClick then reloadGame() end
-    elseif gameState == GAME_STATE.running then
-        updateScore(x, y, button)
-    end
+    game:mousepressed(x, y, button)
 end
