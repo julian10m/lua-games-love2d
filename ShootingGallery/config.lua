@@ -19,3 +19,5 @@ function loadSprites()
     sprites.target = love.graphics.newImage("sprites/target.png")
     return sprites
 end
+
+graphics = love.graphics
