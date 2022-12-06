@@ -1,25 +1,43 @@
-function love.load()
-    gameState = 1
-    target = {}
-    target.x = 300
-    target.y = 100
-    target.radius = 50
-    score = 0
-    timer = 5
-    gameFont = love.graphics.newFont(30)
+GAME_STATE = {
+    menu = 1,
+    running = 2
+}
+
+MOUSE = {
+    leftClick = 1,
+    rightClick = 2,
+    middleClick = 3
+}
+
+INIT_TIMER = 10
+INIT_SCORE = 0
+
+function loadSprites()
     sprites = {}
     sprites.sky = love.graphics.newImage("sprites/sky.png")
     sprites.crosshair = love.graphics.newImage("sprites/crosshair.png")
     sprites.target = love.graphics.newImage("sprites/target.png")
+    return sprites
+end
+
+function love.load()
+    gameFont = love.graphics.newFont(30)
     love.mouse.setVisible(false)
+    sprites = loadSprites()
+    gameState = GAME_STATE.menu
+    score = INIT_SCORE
+    timer = INIT_TIMER
+    target = {}
+    target.radius = 50
+    placeTarget()
 end
 
 function love.update(dt)
-    if gameState == 2 then
+    if gameState == GAME_STATE.running then
         if timer > 0 then
             timer = timer - dt
         else
-            gameState = 1
+            gameState = GAME_STATE.menu
             if timer < 0 then
                 timer = 0
             end
@@ -34,14 +52,14 @@ function love.draw()
     love.graphics.print("Score: " .. score, 25, 5)
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("Time left: " .. timer - timer % 0.001, love.graphics.getWidth() - 300, 5)
-    if gameState == 1 then
+    if gameState == GAME_STATE.menu then
         love.graphics.printf(
             "Click anywhere to begin!",
             0,
             love.graphics.getHeight() / 2,
             love.graphics.getWidth(),
             "center")
-    elseif gameState == 2 then
+    elseif gameState == GAME_STATE.running then
         love.graphics.draw(sprites.target, target.x - target.radius, target.y - target.radius)
     end
     love.graphics.draw(
@@ -52,19 +70,18 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-    if button == 3 then return end
-    if gameState == 1 then
-        if button == 1 then
-            gameState = 2
-            timer = 5
-            score = 0
+    if button == MOUSE.middleClick then return end
+    if gameState == GAME_STATE.menu then
+        if button == MOUSE.leftClick then
+            gameState = GAME_STATE.running
+            timer = INIT_TIMER
+            score = INIT_SCORE
         end
     else
         if distanceBetween(x, y, target.x, target.y) < target.radius then
-            target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
-            target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
+            placeTarget()
             local deltaScore = 1
-            if button == 2 then
+            if button == MOUSE.rightClick then
                 deltaScore = 2
                 timer = timer - 1
             end
@@ -75,6 +92,11 @@ function love.mousepressed(x, y, button, istouch, presses)
             end
         end
     end
+end
+
+function placeTarget()
+    target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
+    target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
 end
 
 function distanceBetween(x1, y1, x2, y2)
