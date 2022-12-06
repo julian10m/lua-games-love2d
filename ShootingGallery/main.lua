@@ -52,20 +52,26 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-    if button == 1 then
-        if gameState == 1 then
+    if button == 3 then return end
+    if gameState == 1 then
+        if button == 1 then
             gameState = 2
             timer = 5
             score = 0
+        end
+    else
+        if distanceBetween(x, y, target.x, target.y) < target.radius then
+            target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
+            target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
+            local deltaScore = 1
+            if button == 2 then
+                deltaScore = 2
+                timer = timer - 1
+            end
+            score = score + deltaScore
         else
-            if distanceBetween(x, y, target.x, target.y) < target.radius then
-                score = score + 1
-                target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
-                target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
-            else
-                if score > 0 then
-                    score = score - 1
-                end
+            if score > 0 then
+                score = score - 1
             end
         end
     end
