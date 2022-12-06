@@ -57,10 +57,16 @@ function love.mousepressed(x, y, button, istouch, presses)
             gameState = 2
             timer = 5
             score = 0
-        elseif distanceBetween(x, y, target.x, target.y) < target.radius then
-            score = score + 1
-            target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
-            target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
+        else
+            if distanceBetween(x, y, target.x, target.y) < target.radius then
+                score = score + 1
+                target.x = math.random(target.radius, love.graphics.getWidth() - target.radius)
+                target.y = math.random(target.radius, love.graphics.getHeight() - target.radius)
+            else
+                if score > 0 then
+                    score = score - 1
+                end
+            end
         end
     end
 end
