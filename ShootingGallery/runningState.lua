@@ -5,7 +5,7 @@ RunningState.rightClickScore = RunningState.leftClickScore * 2
 function RunningState:update(game, dt)
     game.timer = math.max(game.timer - dt, 0)
     if game.timer == 0 then
-        game:reload()
+        game:restart()
     end
 end
 

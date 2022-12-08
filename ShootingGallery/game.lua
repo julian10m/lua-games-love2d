@@ -1,21 +1,9 @@
 MenuState = require("menuState")
 RunningState = require("runningState")
 
-Game = {
-    score = INIT_SCORE,
-    timer = INIT_TIMER,
-    font = graphics.newFont(30),
-    state = MenuState
-}
+Game = {}
 
-function Game:new()
-    local obj = {}
-    setmetatable(obj, self)
-    self.__index = self
-    return obj
-end
-
-function Game:reload()
+function Game:restart()
     self.score = INIT_SCORE
     self.timer = INIT_TIMER
     self.state = MenuState
@@ -42,7 +30,7 @@ function Game:rightClick(x, y)
 end
 
 function Game:draw()
-    graphics.setFont(game.font)
+    graphics.setFont(GAME_FONT)
     self:drawBackground()
     self.state:draw()
     self:drawCrosshair()

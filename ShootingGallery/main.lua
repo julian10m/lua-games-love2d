@@ -1,16 +1,16 @@
 dofile("config.lua")
-Game = dofile("game.lua")
+game = dofile("game.lua")
 
 function love.load()
-    game = Game:new()
-    love.mouse.setVisible(false)
-    sprites = loadSprites()
-    target = { radius = 50 }
+    game:restart()
     game:placeTarget()
     mouseClickActions = {
         [MOUSE.leftClick] = game.leftClick,
         [MOUSE.rightClick] = game.rightClick
     }
+    love.mouse.setVisible(false)
+    loadSprites()
+    loadTarget()
 end
 
 function love.update(dt)
