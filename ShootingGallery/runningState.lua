@@ -1,35 +1,49 @@
 RunningState = {}
+
+RunningState.score = INIT_SCORE
+RunningState.timer = INIT_TIMER
+
 RunningState.leftClickDeltaScore = 1
 RunningState.leftClickDeltaTimer = 0
+
 RunningState.rightClickDeltaScore = RunningState.leftClickDeltaScore * 2
 RunningState.rightClickDeltaTimer = 1
 
+function RunningState:new()
+    self:placeTarget()
+    local state = {}
+    setmetatable(state, self)
+    self.__index = self
+    return state
+end
+
+function RunningState:placeTarget()
+    target.x = math.random(target.radius, graphics.getWidth() - target.radius)
+    target.y = math.random(target.radius, graphics.getHeight() - target.radius)
+end
+
 function RunningState:update(game, dt)
-    game.timer = math.max(game.timer - dt, 0)
-    if game.timer == 0 then
+    self.timer = math.max(self.timer - dt, 0)
+    if self.timer == 0 then
         game:restart()
     end
 end
 
 function RunningState:leftClick(game, x, y)
-    RunningState:handleShooting(game, x, y, RunningState.leftClickDeltaScore, RunningState.leftClickDeltaTimer)
+    self:handleShooting(game, x, y, self.leftClickDeltaScore, self.leftClickDeltaTimer)
 end
 
 function RunningState:rightClick(game, x, y)
-    RunningState:handleShooting(game, x, y, RunningState.rightClickDeltaScore, RunningState.rightClickDeltaTimer)
-end
-
-function RunningState:draw()
-    graphics.draw(sprites.target, target.x - target.radius, target.y - target.radius)
+    self:handleShooting(game, x, y, self.rightClickDeltaScore, self.rightClickDeltaTimer)
 end
 
 function RunningState:handleShooting(game, x, y, deltaScore, deltaTimer)
     if isTargetHit(x, y) then
-        game:placeTarget()
-        game.score = game.score + deltaScore
-        game.timer = game.timer - deltaTimer
-    elseif game.score > 0 then
-        game.score = game.score - 1
+        self:placeTarget()
+        self.score = self.score + deltaScore
+        self.timer = self.timer - deltaTimer
+    elseif self.score > 0 then
+        self.score = self.score - 1
     end
 end
 
@@ -37,8 +51,11 @@ function isTargetHit(x, y)
     return distanceBetween(x, y, target.x, target.y) < target.radius
 end
 
-function distanceBetween(x1, y1, x2, y2)
-    return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
+function RunningState:draw()
+    graphics.setColor(1, 1, 1)
+    graphics.print("Score: " .. self.score, 25, 5)
+    graphics.print("Time left: " .. self.timer - self.timer % 0.001, graphics.getWidth() - 300, 5)
+    graphics.draw(sprites.target, target.x - target.radius, target.y - target.radius)
 end
 
 return RunningState

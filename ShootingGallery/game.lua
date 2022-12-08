@@ -6,14 +6,11 @@ RunningState = require("runningState")
 Game = {}
 
 function Game:restart()
-    self.score = INIT_SCORE
-    self.timer = INIT_TIMER
     self.state = MenuState
-    game:placeTarget()
 end
 
 function Game:setRunningState()
-    self.state = RunningState
+    self.state = RunningState:new()
 end
 
 function Game:setMenuState()
@@ -33,7 +30,6 @@ function Game:rightClick(x, y)
 end
 
 function Game:draw()
-    graphics.setFont(GAME_FONT)
     self:drawBackground()
     self.state:draw()
     self:drawCrosshair()
@@ -41,21 +37,12 @@ end
 
 function Game:drawBackground()
     graphics.draw(sprites.sky, 0, 0)
-    graphics.setColor(1, 1, 1)
-    graphics.print("Score: " .. self.score, 25, 5)
-    graphics.setColor(1, 1, 1)
-    graphics.print("Time left: " .. self.timer - self.timer % 0.001, graphics.getWidth() - 300, 5)
 end
 
 function Game:drawCrosshair()
     graphics.draw(sprites.crosshair, love.mouse.getX() - sprites.crosshair:getWidth() / 2,
         love.mouse.getY() - sprites.crosshair:getHeight() / 2
     )
-end
-
-function Game:placeTarget()
-    target.x = math.random(target.radius, graphics.getWidth() - target.radius)
-    target.y = math.random(target.radius, graphics.getHeight() - target.radius)
 end
 
 return Game

@@ -20,6 +20,7 @@ mouseClickActions = {
 INIT_TIMER = 10
 INIT_SCORE = 0
 GAME_FONT = graphics.newFont(30)
+graphics.setFont(GAME_FONT)
 
 sprites = {
     sky = graphics.newImage("sprites/sky.png"),
@@ -28,3 +29,7 @@ sprites = {
 }
 
 target = { radius = 50 }
+
+function distanceBetween(x1, y1, x2, y2)
+    return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
+end
