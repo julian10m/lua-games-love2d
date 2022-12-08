@@ -2,6 +2,7 @@ dofile("config.lua")
 
 MenuState = require("menuState")
 RunningState = require("runningState")
+FinishedState = require("finishedState")
 
 Game = {}
 
@@ -15,6 +16,12 @@ end
 
 function Game:setMenuState()
     self.state = MenuState
+end
+
+function Game:setFinishedState(score)
+    self.highestScore = self.highestScore or score
+    self.highestScore = (score > self.highestScore) and score or self.highestScore
+    self.state = FinishedState:new(score)
 end
 
 function Game:update(dt)
@@ -31,7 +38,7 @@ end
 
 function Game:draw()
     self:drawBackground()
-    self.state:draw()
+    self.state:draw(self.highestScore)
     self:drawCrosshair()
 end
 
