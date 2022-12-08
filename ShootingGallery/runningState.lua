@@ -17,12 +17,13 @@ function RunningState:new()
     return state
 end
 
-function RunningState:placeTarget()
-    target.x = math.random(target.radius, graphics.getWidth() - target.radius)
-    target.y = math.random(target.radius, graphics.getHeight() - target.radius)
+function RunningState:placeTarget(x, y)
+    target.x = x or math.random(target.radius, graphics.getWidth() - target.radius)
+    target.y = y or math.random(target.radius, graphics.getHeight() - target.radius)
 end
 
 function RunningState:update(game, dt)
+    -- self:placeTarget(love.mouse.getX() + target.radius, love.mouse.getY() + target.radius)
     self.timer = math.max(self.timer - dt, 0)
     if self.timer == 0 then
         game:restart()
