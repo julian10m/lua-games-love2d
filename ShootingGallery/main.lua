@@ -7,6 +7,10 @@ function love.load()
     sprites = loadSprites()
     target = { radius = 50 }
     game:placeTarget()
+    mouseClickActions = {
+        [MOUSE.leftClick] = game.leftClick,
+        [MOUSE.rightClick] = game.rightClick
+    }
 end
 
 function love.update(dt)
@@ -18,5 +22,5 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-    game:mousepressed(x, y, button)
+    mouseClickActions[button](game, x, y)
 end

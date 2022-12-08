@@ -15,9 +15,10 @@ function Game:new()
     return obj
 end
 
-function Game:placeTarget()
-    target.x = math.random(target.radius, graphics.getWidth() - target.radius)
-    target.y = math.random(target.radius, graphics.getHeight() - target.radius)
+function Game:reload()
+    self.score = INIT_SCORE
+    self.timer = INIT_TIMER
+    self.state = MenuState
 end
 
 function Game:setRunningState()
@@ -28,18 +29,16 @@ function Game:setMenuState()
     self.state = MenuState
 end
 
-function Game:reload()
-    self.score = INIT_SCORE
-    self.timer = INIT_TIMER
-    self.state = MenuState
-end
-
 function Game:update(dt)
     self.state:update(self, dt)
 end
 
-function Game:mousepressed(x, y, button)
-    self.state:mousepressed(self, x, y, button)
+function Game:leftClick(x, y)
+    self.state:leftClick(self, x, y)
+end
+
+function Game:rightClick(x, y)
+    self.state:rightClick(self, x, y)
 end
 
 function Game:draw()
@@ -61,6 +60,11 @@ function Game:drawCrosshair()
     graphics.draw(sprites.crosshair, love.mouse.getX() - sprites.crosshair:getWidth() / 2,
         love.mouse.getY() - sprites.crosshair:getHeight() / 2
     )
+end
+
+function Game:placeTarget()
+    target.x = math.random(target.radius, graphics.getWidth() - target.radius)
+    target.y = math.random(target.radius, graphics.getHeight() - target.radius)
 end
 
 return Game

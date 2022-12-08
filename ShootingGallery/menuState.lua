@@ -4,10 +4,12 @@ function MenuState:update(game, dt)
     return
 end
 
-function MenuState:mousepressed(game, x, y, button)
-    if button == MOUSE.leftClick then
-        game:setRunningState()
-    end
+function MenuState:leftClick(game, x, y)
+    game:setRunningState()
+end
+
+function MenuState:rightClick(game, x, y, button)
+    return
 end
 
 function MenuState:draw()
