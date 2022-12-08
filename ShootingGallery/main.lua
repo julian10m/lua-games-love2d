@@ -1,16 +1,7 @@
-dofile("config.lua")
 game = dofile("game.lua")
 
 function love.load()
     game:restart()
-    game:placeTarget()
-    mouseClickActions = {
-        [MOUSE.leftClick] = game.leftClick,
-        [MOUSE.rightClick] = game.rightClick
-    }
-    love.mouse.setVisible(false)
-    loadSprites()
-    loadTarget()
 end
 
 function love.update(dt)

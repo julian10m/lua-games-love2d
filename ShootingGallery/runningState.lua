@@ -1,6 +1,8 @@
 RunningState = {}
-RunningState.leftClickScore = 1
-RunningState.rightClickScore = RunningState.leftClickScore * 2
+RunningState.leftClickDeltaScore = 1
+RunningState.leftClickDeltaTimer = 0
+RunningState.rightClickDeltaScore = RunningState.leftClickDeltaScore * 2
+RunningState.rightClickDeltaTimer = 1
 
 function RunningState:update(game, dt)
     game.timer = math.max(game.timer - dt, 0)
@@ -10,26 +12,25 @@ function RunningState:update(game, dt)
 end
 
 function RunningState:leftClick(game, x, y)
-    if isTargetHit(x, y) then
-        game:placeTarget()
-        game.score = game.score + RunningState.leftClickScore
-    elseif game.score > 0 then
-        game.score = game.score - 1
-    end
+    RunningState:handleShooting(game, x, y, RunningState.leftClickDeltaScore, RunningState.leftClickDeltaTimer)
 end
 
 function RunningState:rightClick(game, x, y)
-    if isTargetHit(x, y) then
-        game:placeTarget()
-        game.score = game.score + RunningState.rightClickScore
-        game.timer = game.timer - 1
-    elseif game.score > 0 then
-        game.score = game.score - 1
-    end
+    RunningState:handleShooting(game, x, y, RunningState.rightClickDeltaScore, RunningState.rightClickDeltaTimer)
 end
 
 function RunningState:draw()
     graphics.draw(sprites.target, target.x - target.radius, target.y - target.radius)
+end
+
+function RunningState:handleShooting(game, x, y, deltaScore, deltaTimer)
+    if isTargetHit(x, y) then
+        game:placeTarget()
+        game.score = game.score + deltaScore
+        game.timer = game.timer - deltaTimer
+    elseif game.score > 0 then
+        game.score = game.score - 1
+    end
 end
 
 function isTargetHit(x, y)

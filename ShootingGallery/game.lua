@@ -1,3 +1,5 @@
+dofile("config.lua")
+
 MenuState = require("menuState")
 RunningState = require("runningState")
 
@@ -7,6 +9,7 @@ function Game:restart()
     self.score = INIT_SCORE
     self.timer = INIT_TIMER
     self.state = MenuState
+    game:placeTarget()
 end
 
 function Game:setRunningState()

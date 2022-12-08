@@ -1,4 +1,5 @@
 graphics = love.graphics
+love.mouse.setVisible(false)
 
 GAME_STATE = {
     menu = 1,
@@ -11,18 +12,19 @@ MOUSE = {
     middleClick = 3
 }
 
+mouseClickActions = {
+    [MOUSE.leftClick] = function(game, x, y) game:leftClick(x, y) end,
+    [MOUSE.rightClick] = function(game, x, y) game:rightClick(x, y) end,
+}
+
 INIT_TIMER = 10
 INIT_SCORE = 0
 GAME_FONT = graphics.newFont(30)
-sprites = {}
-target = {}
 
-function loadSprites()
-    sprites.sky = love.graphics.newImage("sprites/sky.png")
-    sprites.crosshair = love.graphics.newImage("sprites/crosshair.png")
-    sprites.target = love.graphics.newImage("sprites/target.png")
-end
+sprites = {
+    sky = graphics.newImage("sprites/sky.png"),
+    crosshair = graphics.newImage("sprites/crosshair.png"),
+    target = graphics.newImage("sprites/target.png"),
+}
 
-function loadTarget()
-    target.radius = 50
-end
+target = { radius = 50 }
