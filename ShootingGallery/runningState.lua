@@ -1,3 +1,6 @@
+local CircleTarget = require("circleTarget")
+local RectangleTarget = require("rectangleTarget")
+
 local RunningState = {}
 
 RunningState.score = INIT_SCORE
@@ -10,11 +13,23 @@ RunningState.rightClickDeltaScore = RunningState.leftClickDeltaScore * 2
 RunningState.rightClickDeltaTimer = 1
 
 function RunningState:new()
-    target:place()
+    self:placeNewTarget()
     local state = {}
     setmetatable(state, self)
     self.__index = self
     return state
+end
+
+function RunningState:placeNewTarget()
+    target = self:createRandomTarget()
+    target:place()
+end
+
+function RunningState:createRandomTarget()
+    if math.random() < 0.5 then
+        return RectangleTarget:new()
+    end
+    return CircleTarget:new()
 end
 
 function RunningState:update(game, dt)
@@ -34,7 +49,7 @@ end
 
 function RunningState:handleShooting(x, y, deltaScore, deltaTimer)
     if target:isHit(x, y) then
-        target:place()
+        self:placeNewTarget()
         self.score = self.score + deltaScore
         self.timer = self.timer - deltaTimer
     elseif self.score > 0 then

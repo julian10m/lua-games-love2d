@@ -1,7 +1,5 @@
 dofile("config.lua")
 
-local CircleTarget = require("circleTarget")
-local RectangleTarget = require("rectangleTarget")
 local MenuState = require("menuState")
 local RunningState = require("runningState")
 local FinishedState = require("finishedState")
@@ -13,7 +11,6 @@ function Game:restart()
 end
 
 function Game:setRunningState()
-    target = RectangleTarget:new()
     self.state = RunningState:new()
 end
 
