@@ -33,15 +33,6 @@ function RectangleTarget:draw()
     graphics.rotate(self.angle)
     graphics.rectangle("fill", -self.width / 2, -self.height / 2, self.width, self.height) -- origin in the middle
     graphics.pop()
-    graphics.print("angle: " .. self.angle / math.pi, 5, graphics.getHeight() - 50)
-    graphics.setColor(0, 0, 0)
-    graphics.line(self.x - 50, self:topLeftSideFunc(self.x - 50), self.x + 50, self:topLeftSideFunc(self.x + 50))
-    graphics.setColor(0, 0, 1)
-    graphics.line(self.x - 50, self:topRightSideFunc(self.x - 50), self.x + 50, self:topRightSideFunc(self.x + 50))
-    graphics.setColor(1, 1, 0)
-    graphics.line(self.x - 50, self:belowRightSideFunc(self.x - 50), self.x + 50, self:belowRightSideFunc(self.x + 50))
-    graphics.setColor(0, 1, 0)
-    graphics.line(self.x - 50, self:belowLeftSideFunc(self.x - 50), self.x + 50, self:belowLeftSideFunc(self.x + 50))
     graphics.setColor(1, 1, 1)
 end
 
