@@ -22,7 +22,12 @@ end
 
 function RectangleTarget:draw()
     graphics.setColor(1, 0, 0)
-    graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    graphics.push()
+    graphics.translate(self.x, self.y)
+    graphics.rotate(0)
+    graphics.rectangle("fill", 0, 0, self.width, self.height)
+    -- graphics.rectangle("fill", -self.width / 2, -self.height / 2, self.width, self.height) -- origin in the middle
+    graphics.pop()
     graphics.setColor(1, 1, 1)
 end
 
