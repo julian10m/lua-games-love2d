@@ -8,7 +8,7 @@ mouseClickActions = {
     [2] = function(game, x, y) game:rightClick(x, y) end,
 }
 
-INIT_TIMER = 100
+INIT_TIMER = 20
 INIT_SCORE = 0
 TARGET_RADIUS = 50
 
