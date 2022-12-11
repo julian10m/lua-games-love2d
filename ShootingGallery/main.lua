@@ -1,4 +1,4 @@
-game = dofile("game.lua")
+local game = dofile("game.lua")
 
 function love.load()
     game:restart()

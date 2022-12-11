@@ -1,16 +1,19 @@
 dofile("config.lua")
 
-MenuState = require("menuState")
-RunningState = require("runningState")
-FinishedState = require("finishedState")
+local CircleTarget = require("circleTarget")
+local RectangleTarget = require("rectangleTarget")
+local MenuState = require("menuState")
+local RunningState = require("runningState")
+local FinishedState = require("finishedState")
 
-Game = {}
+local Game = {}
 
 function Game:restart()
     self.state = MenuState
 end
 
 function Game:setRunningState()
+    target = RectangleTarget:new()
     self.state = RunningState:new()
 end
 

@@ -1,4 +1,4 @@
-RunningState = {}
+local RunningState = {}
 
 RunningState.score = INIT_SCORE
 RunningState.timer = INIT_TIMER
@@ -10,20 +10,14 @@ RunningState.rightClickDeltaScore = RunningState.leftClickDeltaScore * 2
 RunningState.rightClickDeltaTimer = 1
 
 function RunningState:new()
-    self:placeTarget()
+    target:place()
     local state = {}
     setmetatable(state, self)
     self.__index = self
     return state
 end
 
-function RunningState:placeTarget(x, y)
-    target.x = x or math.random(target.radius, graphics.getWidth() - target.radius)
-    target.y = y or math.random(target.radius, graphics.getHeight() - target.radius)
-end
-
 function RunningState:update(game, dt)
-    -- self:placeTarget(love.mouse.getX() + target.radius, love.mouse.getY() + target.radius)
     self.timer = math.max(self.timer - dt, 0)
     if self.timer == 0 then
         game:setFinishedState(self.score)
@@ -39,17 +33,13 @@ function RunningState:rightClick(game, x, y)
 end
 
 function RunningState:handleShooting(x, y, deltaScore, deltaTimer)
-    if isTargetHit(x, y) then
-        self:placeTarget()
+    if target:isHit(x, y) then
+        target:place()
         self.score = self.score + deltaScore
         self.timer = self.timer - deltaTimer
     elseif self.score > 0 then
         self.score = self.score - 1
     end
-end
-
-function isTargetHit(x, y)
-    return distanceBetween(x, y, target.x, target.y) < target.radius
 end
 
 function RunningState:draw(highestScore)
@@ -58,7 +48,7 @@ function RunningState:draw(highestScore)
     if highestScore then scoreMsg = scoreMsg .. "\nHighest score: " .. highestScore end
     graphics.print(scoreMsg, 25, 5)
     graphics.print("Time left: " .. self.timer - self.timer % 0.001, graphics.getWidth() - 300, 5)
-    graphics.draw(sprites.target, target.x - target.radius, target.y - target.radius)
+    target:draw()
 end
 
 return RunningState

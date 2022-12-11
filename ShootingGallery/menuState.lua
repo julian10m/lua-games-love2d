@@ -1,4 +1,4 @@
-MenuState = {}
+local MenuState = {}
 
 function MenuState:update(game, dt)
     return
@@ -15,7 +15,8 @@ end
 function MenuState:draw(highestScore)
     local welcomeMsg = "Click anywhere to begin!"
     if highestScore then welcomeMsg = "The highest score so far is " ..
-        highestScore .. "\nThink you can beat it? ;)\n\n" .. welcomeMsg end
+            highestScore .. "\nThink you can beat it? ;)\n\n" .. welcomeMsg
+    end
     graphics.printf(welcomeMsg, 0, graphics.getHeight() / 2, graphics.getWidth(), "center")
 end
 

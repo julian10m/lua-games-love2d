@@ -1,4 +1,4 @@
-FinishedState = {}
+local FinishedState = {}
 
 function FinishedState:new(score)
     local state = {}
