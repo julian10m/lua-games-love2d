@@ -1,4 +1,4 @@
-math.randomseed(os.time())
+math.randomseed(1000 * os.time() * 13 / 7)
 
 graphics = love.graphics
 love.mouse.setVisible(false)
