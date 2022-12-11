@@ -17,9 +17,13 @@ function RectangleTarget:new(width, height)
     return t
 end
 
+function RectangleTarget:largestSide()
+    return math.max(self.width, self.height)
+end
+
 function RectangleTarget:place(x, y)
-    self.x = x or math.random(self.width / 2, graphics.getWidth() - self.width / 2)
-    self.y = y or math.random(self.height / 2, graphics.getHeight() - self.height / 2)
+    self.x = x or math.random(self:largestSide() / 2, graphics.getWidth() - self:largestSide() / 2)
+    self.y = y or math.random(self:largestSide() / 2, graphics.getHeight() - self:largestSide() / 2)
 end
 
 function RectangleTarget:draw()
