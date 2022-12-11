@@ -21,8 +21,8 @@ function RunningState:new()
 end
 
 function RunningState:placeNewTarget()
-    target = self:createRandomTarget()
-    target:place()
+    self.target = self:createRandomTarget()
+    self.target:place()
 end
 
 function RunningState:createRandomTarget()
@@ -48,7 +48,7 @@ function RunningState:rightClick(game, x, y)
 end
 
 function RunningState:handleShooting(x, y, deltaScore, deltaTimer)
-    if target:isHit(x, y) then
+    if self.target:isHit(x, y) then
         self:placeNewTarget()
         self.score = self.score + deltaScore
         self.timer = self.timer - deltaTimer
@@ -63,7 +63,7 @@ function RunningState:draw(highestScore)
     if highestScore then scoreMsg = scoreMsg .. "\nHighest score: " .. highestScore end
     graphics.print(scoreMsg, 25, 5)
     graphics.print("Time left: " .. self.timer - self.timer % 0.001, graphics.getWidth() - 300, 5)
-    target:draw()
+    self.target:draw()
 end
 
 return RunningState
