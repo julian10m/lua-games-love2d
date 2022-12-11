@@ -13,7 +13,7 @@ function RectangleTarget:new(width, height)
             t.height = height
         end
     end
-    -- t.angle = math.pi * math.random()
+    t.angle = math.random() * math.pi / 2
     return t
 end
 
@@ -27,17 +27,41 @@ function RectangleTarget:draw()
     graphics.push()
     graphics.translate(self.x, self.y)
     graphics.rotate(self.angle)
-    -- graphics.rectangle("fill", 0, 0, self.width, self.height)
     graphics.rectangle("fill", -self.width / 2, -self.height / 2, self.width, self.height) -- origin in the middle
     graphics.pop()
     graphics.setColor(1, 1, 1)
 end
 
 function RectangleTarget:isHit(x, y)
-    return self.x - self.width / 2 <= x and
-        x <= self.x + self.width / 2 and
-        self.y - self.height / 2 <= y and
-        y <= self.y + self.height / 2
+    if self.angle == 0 then
+        return self.x - self.width / 2 <= x and
+            x <= self.x + self.width / 2 and
+            self.y - self.height / 2 <= y and
+            y <= self.y + self.height / 2
+    end
+    return self:rightSideFunc(x) >= y and
+        self:leftSideFunc(x) <= y and
+        self:topSideFunc(x) <= y and
+        self:belowSideFunc(x) >= y
+
+end
+
+function RectangleTarget:rightSideFunc(x)
+    return math.tan(self.angle) * (x - self.x) +
+        (self.height / 2) * math.cos(self.angle) * (1 + math.tan(self.angle) ^ 2) + self.y
+end
+
+function RectangleTarget:leftSideFunc(x)
+    return self:rightSideFunc(x) - (self.height / math.cos(self.angle))
+end
+
+function RectangleTarget:topSideFunc(x)
+    return (-1 / math.tan(self.angle)) * (x - self.x) -
+        (self.width / 2) * math.sin(self.angle) * (1 + 1 / math.tan(self.angle) ^ 2) + self.y
+end
+
+function RectangleTarget:belowSideFunc(x)
+    return self:topSideFunc(x) + (self.width / math.sin(self.angle))
 end
 
 return RectangleTarget
