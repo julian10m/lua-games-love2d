@@ -13,7 +13,7 @@ function RectangleTarget:new(width, height)
             t.height = height
         end
     end
-    t.angle = math.random() * math.pi / 2
+    t.angle = math.random() * math.pi
     return t
 end
 
@@ -33,6 +33,15 @@ function RectangleTarget:draw()
     graphics.rotate(self.angle)
     graphics.rectangle("fill", -self.width / 2, -self.height / 2, self.width, self.height) -- origin in the middle
     graphics.pop()
+    graphics.print("angle: " .. self.angle / math.pi, 5, graphics.getHeight() - 50)
+    graphics.setColor(0, 0, 0)
+    graphics.line(self.x - 50, self:rightSideFunc(self.x - 50), self.x + 50, self:rightSideFunc(self.x + 50))
+    graphics.setColor(0, 0, 1)
+    graphics.line(self.x - 50, self:topSideFunc(self.x - 50), self.x + 50, self:topSideFunc(self.x + 50))
+    graphics.setColor(0, 1, 1)
+    graphics.line(self.x - 50, self:leftSideFunc(self.x - 50), self.x + 50, self:leftSideFunc(self.x + 50))
+    graphics.setColor(0, 1, 0)
+    graphics.line(self.x - 50, self:belowSideFunc(self.x - 50), self.x + 50, self:belowSideFunc(self.x + 50))
     graphics.setColor(1, 1, 1)
 end
 
@@ -43,8 +52,12 @@ function RectangleTarget:isHit(x, y)
             self.y - self.height / 2 <= y and
             y <= self.y + self.height / 2
     end
-    return self:rightSideFunc(x) >= y and self:topSideFunc(x) >= y and
-        self:leftSideFunc(x) <= y and self:belowSideFunc(x) <= y
+    if self.angle < math.pi / 2 then
+        return self:rightSideFunc(x) >= y and self:topSideFunc(x) >= y and
+            self:leftSideFunc(x) <= y and self:belowSideFunc(x) <= y
+    end
+    return self:rightSideFunc(x) <= y and self:topSideFunc(x) >= y and
+        self:leftSideFunc(x) >= y and self:belowSideFunc(x) <= y
 end
 
 function RectangleTarget:deltaX(x)
