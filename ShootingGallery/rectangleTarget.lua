@@ -35,13 +35,13 @@ function RectangleTarget:draw()
     graphics.pop()
     graphics.print("angle: " .. self.angle / math.pi, 5, graphics.getHeight() - 50)
     graphics.setColor(0, 0, 0)
-    graphics.line(self.x - 50, self:rightSideFunc(self.x - 50), self.x + 50, self:rightSideFunc(self.x + 50))
+    graphics.line(self.x - 50, self:topLeftSideFunc(self.x - 50), self.x + 50, self:topLeftSideFunc(self.x + 50))
     graphics.setColor(0, 0, 1)
-    graphics.line(self.x - 50, self:topSideFunc(self.x - 50), self.x + 50, self:topSideFunc(self.x + 50))
-    graphics.setColor(0, 1, 1)
-    graphics.line(self.x - 50, self:leftSideFunc(self.x - 50), self.x + 50, self:leftSideFunc(self.x + 50))
+    graphics.line(self.x - 50, self:topRightSideFunc(self.x - 50), self.x + 50, self:topRightSideFunc(self.x + 50))
+    graphics.setColor(1, 1, 0)
+    graphics.line(self.x - 50, self:belowRightSideFunc(self.x - 50), self.x + 50, self:belowRightSideFunc(self.x + 50))
     graphics.setColor(0, 1, 0)
-    graphics.line(self.x - 50, self:belowSideFunc(self.x - 50), self.x + 50, self:belowSideFunc(self.x + 50))
+    graphics.line(self.x - 50, self:belowLeftSideFunc(self.x - 50), self.x + 50, self:belowLeftSideFunc(self.x + 50))
     graphics.setColor(1, 1, 1)
 end
 
@@ -53,11 +53,15 @@ function RectangleTarget:isHit(x, y)
             y <= self.y + self.height / 2
     end
     if self.angle < math.pi / 2 then
-        return self:rightSideFunc(x) >= y and self:topSideFunc(x) >= y and
-            self:leftSideFunc(x) <= y and self:belowSideFunc(x) <= y
+        return self:topLeftSideFunc(x) >= y and self:topRightSideFunc(x) >= y and
+            self:belowRightSideFunc(x) <= y and self:belowLeftSideFunc(x) <= y
     end
-    return self:rightSideFunc(x) <= y and self:topSideFunc(x) >= y and
-        self:leftSideFunc(x) >= y and self:belowSideFunc(x) <= y
+    --[[With a rotation angle that goes from math.pi / 2 to math.pi, the rectangle rorates enough so 
+    that the side that each segment represents changes counter-clockise, e.g. the top left side becomes
+    the below left one. Hence, we just need to reflect this in the condition and we are set to go
+     --]]
+    return self:topLeftSideFunc(x) <= y and self:topRightSideFunc(x) >= y and
+        self:belowRightSideFunc(x) >= y and self:belowLeftSideFunc(x) <= y
 end
 
 function RectangleTarget:deltaX(x)
@@ -72,24 +76,22 @@ function RectangleTarget:orthogonalSlope()
     return -1 / self:slope()
 end
 
-function RectangleTarget:rightSideFunc(x)
+function RectangleTarget:topLeftSideFunc(x)
     return self:slope() * self:deltaX(x) +
         (self.height / 2) * math.cos(self.angle) * (1 + self:slope() ^ 2) + self.y
 end
 
-function RectangleTarget:leftSideFunc(x)
-    return self:rightSideFunc(x) - (self.height / math.cos(self.angle))
+function RectangleTarget:belowRightSideFunc(x)
+    return self:topLeftSideFunc(x) - (self.height / math.cos(self.angle))
 end
 
-function RectangleTarget:belowSideFunc(x)
-    -- this would be the top  side if the coordinates were not inverted
+function RectangleTarget:belowLeftSideFunc(x)
     return self:orthogonalSlope() * self:deltaX(x) -
         (self.width / 2) * math.sin(self.angle) * (1 + self:orthogonalSlope() ^ 2) + self.y
 end
 
-function RectangleTarget:topSideFunc(x)
-    -- this would be the below side if the coordinates were not inverted
-    return self:belowSideFunc(x) + (self.width / math.sin(self.angle))
+function RectangleTarget:topRightSideFunc(x)
+    return self:belowLeftSideFunc(x) + (self.width / math.sin(self.angle))
 end
 
 return RectangleTarget
