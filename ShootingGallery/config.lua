@@ -1,20 +1,11 @@
+math.randomseed(os.time())
+
 graphics = love.graphics
 love.mouse.setVisible(false)
 
-GAME_STATE = {
-    menu = 1,
-    running = 2
-}
-
-MOUSE = {
-    leftClick = 1,
-    rightClick = 2,
-    middleClick = 3
-}
-
 mouseClickActions = {
-    [MOUSE.leftClick] = function(game, x, y) game:leftClick(x, y) end,
-    [MOUSE.rightClick] = function(game, x, y) game:rightClick(x, y) end,
+    [1] = function(game, x, y) game:leftClick(x, y) end,
+    [2] = function(game, x, y) game:rightClick(x, y) end,
 }
 
 INIT_TIMER = 100
