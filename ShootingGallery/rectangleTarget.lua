@@ -39,29 +39,40 @@ function RectangleTarget:isHit(x, y)
             self.y - self.height / 2 <= y and
             y <= self.y + self.height / 2
     end
-    return self:rightSideFunc(x) >= y and
-        self:leftSideFunc(x) <= y and
-        self:topSideFunc(x) <= y and
-        self:belowSideFunc(x) >= y
+    return self:rightSideFunc(x) >= y and self:topSideFunc(x) >= y and
+        self:leftSideFunc(x) <= y and self:belowSideFunc(x) <= y
+end
 
+function RectangleTarget:deltaX(x)
+    return x - self.x
+end
+
+function RectangleTarget:slope()
+    return math.tan(self.angle)
+end
+
+function RectangleTarget:orthogonalSlope()
+    return -1 / self:slope()
 end
 
 function RectangleTarget:rightSideFunc(x)
-    return math.tan(self.angle) * (x - self.x) +
-        (self.height / 2) * math.cos(self.angle) * (1 + math.tan(self.angle) ^ 2) + self.y
+    return self:slope() * self:deltaX(x) +
+        (self.height / 2) * math.cos(self.angle) * (1 + self:slope() ^ 2) + self.y
 end
 
 function RectangleTarget:leftSideFunc(x)
     return self:rightSideFunc(x) - (self.height / math.cos(self.angle))
 end
 
-function RectangleTarget:topSideFunc(x)
-    return (-1 / math.tan(self.angle)) * (x - self.x) -
-        (self.width / 2) * math.sin(self.angle) * (1 + 1 / math.tan(self.angle) ^ 2) + self.y
+function RectangleTarget:belowSideFunc(x)
+    -- this would be the top  side if the coordinates were not inverted
+    return self:orthogonalSlope() * self:deltaX(x) -
+        (self.width / 2) * math.sin(self.angle) * (1 + self:orthogonalSlope() ^ 2) + self.y
 end
 
-function RectangleTarget:belowSideFunc(x)
-    return self:topSideFunc(x) + (self.width / math.sin(self.angle))
+function RectangleTarget:topSideFunc(x)
+    -- this would be the below side if the coordinates were not inverted
+    return self:belowSideFunc(x) + (self.width / math.sin(self.angle))
 end
 
 return RectangleTarget
