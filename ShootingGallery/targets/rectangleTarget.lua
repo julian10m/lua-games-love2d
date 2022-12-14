@@ -43,16 +43,20 @@ function RectangleTarget:isHit(x, y)
             self.y - self.height / 2 <= y and
             y <= self.y + self.height / 2
     end
-    if self.angle < math.pi / 2 then
-        return self:topLeftSideFunc(x) >= y and self:topRightSideFunc(x) >= y and
-            self:belowRightSideFunc(x) <= y and self:belowLeftSideFunc(x) <= y
+    local qGreater, qSmaller = 0, 0
+    for _, f in pairs({ self.topLeftSideFunc, self.topRightSideFunc, self.belowRightSideFunc, self.belowLeftSideFunc }) do
+        qGreater = qGreater + self:isGreater(f, x, y)
+        qSmaller = qSmaller + self:isSmaller(f, x, y)
     end
-    --[[With a rotation angle that goes from math.pi / 2 to math.pi, the rectangle rorates enough so 
-    that the side that each segment represents changes counter-clockise, e.g. the top left side becomes
-    the below left one. Hence, we just need to reflect this in the condition and we are set to go
-     --]]
-    return self:topLeftSideFunc(x) <= y and self:topRightSideFunc(x) >= y and
-        self:belowRightSideFunc(x) >= y and self:belowLeftSideFunc(x) <= y
+    return qGreater >= 2 and qSmaller >= 2
+end
+
+function RectangleTarget:isGreater(f, x, y)
+    return (f(self, x) >= y) and 1 or 0
+end
+
+function RectangleTarget:isSmaller(f, x, y)
+    return (f(self, x) <= y) and 1 or 0
 end
 
 function RectangleTarget:deltaX(x)
