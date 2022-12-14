@@ -15,7 +15,7 @@ end
 
 function RectangleTarget:update(dt)
     self:updateCenterPosition(dt)
-    self.angle = self.angle + 0.5 * dt * math.pi
+    self.angle = (self.angle + 0.5 * dt * math.pi) % (2 * math.pi)
 end
 
 function RectangleTarget:largestSide()
