@@ -1,5 +1,5 @@
-local CircleTarget = require("circleTarget")
-local RectangleTarget = require("rectangleTarget")
+local CircleTarget = require("targets.circleTarget")
+local RectangleTarget = require("targets.rectangleTarget")
 
 local RunningState = {}
 

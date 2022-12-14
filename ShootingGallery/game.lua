@@ -1,8 +1,8 @@
 dofile("config.lua")
 
-local MenuState = require("menuState")
-local RunningState = require("runningState")
-local FinishedState = require("finishedState")
+local MenuState = require("states.menuState")
+local RunningState = require("states.runningState")
+local FinishedState = require("states.finishedState")
 
 local Game = {}
 

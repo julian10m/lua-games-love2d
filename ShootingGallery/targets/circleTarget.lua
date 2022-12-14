@@ -1,4 +1,4 @@
-local Target = require("target")
+local Target = require("targets.target")
 
 local CircleTarget = Target:new()
 CircleTarget.radius = TARGET_RADIUS
