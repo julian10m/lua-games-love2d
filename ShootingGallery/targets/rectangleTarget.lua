@@ -34,7 +34,6 @@ function RectangleTarget:draw()
     graphics.rotate(self.angle)
     graphics.rectangle("fill", -self.width / 2, -self.height / 2, self.width, self.height) -- origin in the middle
     graphics.pop()
-    graphics.setColor(1, 1, 1)
 end
 
 function RectangleTarget:isHit(x, y)

@@ -18,7 +18,6 @@ function CircleTarget:draw()
     graphics.setColor(1, 0, 0)
     graphics.circle("fill", self.x, self.y, self.radius)
     -- graphics.draw(sprites.circleTarget, self.x - self.radius, self.y - self.radius)
-    graphics.setColor(1, 1, 1)
 end
 
 function CircleTarget:isHit(x, y)

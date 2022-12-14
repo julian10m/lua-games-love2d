@@ -22,6 +22,7 @@ end
 
 function RunningState:placeNewTarget()
     self.target = self:createRandomTarget()
+    self.attempts = {}
     self.target:place()
 end
 
@@ -53,8 +54,11 @@ function RunningState:handleShooting(x, y, deltaScore, deltaTimer)
         self:placeNewTarget()
         self.score = self.score + deltaScore
         self.timer = self.timer - deltaTimer
-    elseif self.score > 0 then
-        self.score = self.score - 1
+    else
+        table.insert(self.attempts, { x = x, y = y })
+        if self.score > 0 then
+            self.score = self.score - 1
+        end
     end
 end
 
@@ -65,6 +69,11 @@ function RunningState:draw(highestScore)
     graphics.print(scoreMsg, 25, 5)
     graphics.print("Time left: " .. self.timer - self.timer % 0.001, graphics.getWidth() - 300, 5)
     self.target:draw()
+    graphics.setColor(0, 0, 0)
+    for _, point in pairs(self.attempts) do
+        graphics.circle("line", point.x, point.y, 2)
+    end
+    graphics.setColor(1, 1, 1)
 end
 
 return RunningState
