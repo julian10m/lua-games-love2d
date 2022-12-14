@@ -37,6 +37,7 @@ function RunningState:update(game, dt)
     if self.timer == 0 then
         game:setFinishedState(self.score)
     end
+    self.target:update(dt)
 end
 
 function RunningState:leftClick(game, x, y)

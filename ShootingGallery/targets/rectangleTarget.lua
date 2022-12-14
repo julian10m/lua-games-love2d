@@ -17,6 +17,12 @@ function RectangleTarget:new(width, height)
     return t
 end
 
+function RectangleTarget:update(dt)
+    self.x = self.x + 1
+    self.y = self.y + 1
+    self.angle = self.angle + 0.5 / math.pi
+end
+
 function RectangleTarget:largestSide()
     return math.max(self.width, self.height)
 end

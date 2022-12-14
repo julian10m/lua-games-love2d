@@ -7,6 +7,11 @@ function Target:new()
     return t
 end
 
+function Target:update(dt)
+    self.x = self.x + 1
+    self.y = self.y + 1
+end
+
 function Target:place(x, y) end
 
 function Target:draw() end
