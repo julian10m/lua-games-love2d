@@ -1,25 +1,21 @@
 local Target = require("targets.target")
 
 local RectangleTarget = Target:new()
-RectangleTarget.width = TARGET_WIDTH
-RectangleTarget.height = TARGET_HEIGHT
+RectangleTarget.minSideLength = MIN_RECT_TARGET_SIZE
+RectangleTarget.maxSideLength = MAX_RECT_TARGET_SIZE
 RectangleTarget.angle = TARGET_ROTATION_ANGLE
 
 function RectangleTarget:new(width, height)
     local t = Target.new(self)
-    if width then
-        t.width = width
-        if height then
-            t.height = height
-        end
-    end
+    t.width = math.random(self.minSideLength, self.maxSideLength)
+    t.height = math.random(self.minSideLength, self.maxSideLength)
     t.angle = math.random() * math.pi
     return t
 end
 
 function RectangleTarget:update(dt)
     self:updateCenterPosition(dt)
-    self.angle = self.angle + dt * math.pi
+    self.angle = self.angle + 0.5 * dt * math.pi
 end
 
 function RectangleTarget:largestSide()
