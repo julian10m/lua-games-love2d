@@ -1,4 +1,4 @@
-local Target = require("target")
+local Target = require("targets.target")
 
 local RectangleTarget = Target:new()
 RectangleTarget.width = TARGET_WIDTH
