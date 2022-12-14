@@ -20,7 +20,7 @@ end
 function RectangleTarget:update(dt)
     self.x = self.x + 1
     self.y = self.y + 1
-    self.angle = self.angle + 0.5 / math.pi
+    self.angle = self.angle + dt * math.pi
 end
 
 function RectangleTarget:largestSide()
