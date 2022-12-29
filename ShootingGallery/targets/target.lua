@@ -1,11 +1,13 @@
 local Target = {}
+Target.minInitialSpeed = MIN_INITIAL_SPEED_TARGET
+Target.maxInitialSpeed = MAX_INITIAL_SPEED_TARGET
 
 function Target:new()
     local t = {}
     setmetatable(t, self)
     self.__index = self
-    t.xSpeed = math.random(10, 200) * (math.random() < 0.5 and -1 or 1)
-    t.ySpeed = math.random(10, 200) * (math.random() < 0.5 and -1 or 1)
+    t.xSpeed = math.random(self.minInitialSpeed, self.maxInitialSpeed) * (math.random() < 0.5 and -1 or 1)
+    t.ySpeed = math.random(self.minInitialSpeed, self.maxInitialSpeed) * (math.random() < 0.5 and -1 or 1)
     return t
 end
 
