@@ -4,18 +4,20 @@ local RectangleTarget = Target:new()
 RectangleTarget.minSideLength = MIN_SIZE_RECT_TARGET
 RectangleTarget.maxSideLength = MAX_SIZE_RECT_TARGET
 RectangleTarget.angle = TARGET_ROTATION_ANGLE
+RectangleTarget.rotationSpeed = 0.5 * math.pi
 
 function RectangleTarget:new(width, height)
     local t = Target.new(self)
     t.width = math.random(self.minSideLength, self.maxSideLength)
     t.height = math.random(self.minSideLength, self.maxSideLength)
     t.angle = math.random() * math.pi
+    t.rotationSpeed = self.rotationSpeed * (math.random() < 0.5 and -1 or 1)
     return t
 end
 
 function RectangleTarget:update(dt)
     self:updateCenterPosition(dt)
-    self.angle = (self.angle + 0.5 * dt * math.pi) % (2 * math.pi)
+    self.angle = (self.angle + self.rotationSpeed * dt) % (2 * math.pi)
 end
 
 function RectangleTarget:largestSide()
