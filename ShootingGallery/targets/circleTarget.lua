@@ -1,11 +1,16 @@
 local Target = require("targets.target")
 
 local CircleTarget = Target:new()
-CircleTarget.radius = TARGET_RADIUS
+CircleTarget.maxRadius = MAX_RADIUS_CIRC_TARGET
+CircleTarget.minRadius = MIN_RADIUS_CIRC_TARGET
 
 function CircleTarget:new(radius)
     local t = Target.new(self)
-    if radius then t.radius = radius end
+    if radius then
+        t.radius = radius
+    else
+        t.radius = math.random(self.minRadius, self.maxRadius)
+    end
     return t
 end
 
