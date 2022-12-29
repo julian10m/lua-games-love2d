@@ -6,9 +6,13 @@ function Target:new()
     local t = {}
     setmetatable(t, self)
     self.__index = self
-    t.xSpeed = math.random(self.minInitialSpeed, self.maxInitialSpeed) * (math.random() < 0.5 and -1 or 1)
-    t.ySpeed = math.random(self.minInitialSpeed, self.maxInitialSpeed) * (math.random() < 0.5 and -1 or 1)
+    self.reloadSpeed(t)
     return t
+end
+
+function Target:reloadSpeed()
+    self.xSpeed = math.random(self.minInitialSpeed, self.maxInitialSpeed) * (math.random() < 0.5 and -1 or 1)
+    self.ySpeed = math.random(self.minInitialSpeed, self.maxInitialSpeed) * (math.random() < 0.5 and -1 or 1)
 end
 
 function Target:update(dt)

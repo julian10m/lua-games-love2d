@@ -55,10 +55,11 @@ function RunningState:handleShooting(x, y, deltaScore, deltaTimer)
         self.score = self.score + deltaScore
         self.timer = self.timer - deltaTimer
     else
-        table.insert(self.attempts, { x = x, y = y })
         if self.score > 0 then
             self.score = self.score - 1
         end
+        self.target:reloadSpeed()
+        table.insert(self.attempts, { x = x, y = y })
     end
 end
 
