@@ -1,5 +1,7 @@
+---@type Target Target
 local Target = require("targets.target")
 
+---@class RectangleTarget:Target
 local RectangleTarget = Target:new()
 RectangleTarget.minSideLength = TARGET_MIN_SIZE_RECT
 RectangleTarget.maxSideLength = TARGET_MAX_SIZE_RECT

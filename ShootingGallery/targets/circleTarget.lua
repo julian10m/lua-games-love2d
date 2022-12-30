@@ -1,5 +1,7 @@
+---@type Target Target
 local Target = require("targets.target")
 
+---@class CircleTarget:Target
 local CircleTarget = Target:new()
 CircleTarget.minRadius = TARGET_MIN_RADIUS_CIRC
 CircleTarget.maxRadius = TARGET_MAX_RADIUS_CIRC
