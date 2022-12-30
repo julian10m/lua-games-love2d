@@ -29,9 +29,10 @@ function RectangleTarget:place(x, y)
     self.y = y or math.random(self:largestSide() / 2, graphics.getHeight() - self:largestSide() / 2)
 end
 
--- function RectangleTarget:reloadSpeed()
---     self.rotationSpeed = self.rotationSpeed * (math.random() < 0.5 and -1 or 1)
--- end
+function RectangleTarget:reloadSpeed()
+    Target.reloadSpeed(self)
+    self.rotationSpeed = self.rotationSpeed * (math.random() < 0.5 and -1 or 1)
+end
 
 function RectangleTarget:draw()
     self:debuggingDraw()
