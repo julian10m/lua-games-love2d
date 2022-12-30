@@ -8,6 +8,10 @@ RectangleTarget.maxSideLength = TARGET_MAX_SIZE_RECT
 RectangleTarget.angle = TARGET_ROTATION_ANGLE
 RectangleTarget.rotationSpeed = TARGET_ROTATION_SPEED
 
+---Constructor returning a new circle target object.
+---@param width number
+---@param height number
+---@return RectangleTarget
 function RectangleTarget:new(width, height)
     local t = Target.new(self)
     t.width = math.random(self.minSideLength, self.maxSideLength)
@@ -17,29 +21,39 @@ function RectangleTarget:new(width, height)
     return t
 end
 
+---Updates the state of the target
+---@param dt number
 function RectangleTarget:update(dt)
     self:updateCenterPosition(dt)
     self.angle = (self.angle + self.rotationSpeed * dt) % (2 * math.pi)
 end
 
+---Returns the largest side among the witth and the height of the rectangle
+---@return number
 function RectangleTarget:largestSide()
     return math.max(self.width, self.height)
 end
 
+---Sets the position of the target
+---@param x number
+---@param y number
 function RectangleTarget:place(x, y)
     self.x = x or math.random(self:largestSide() / 2, graphics.getWidth() - self:largestSide() / 2)
     self.y = y or math.random(self:largestSide() / 2, graphics.getHeight() - self:largestSide() / 2)
 end
 
+---Sets new values for the rotation, x and y speeds of the target.
 function RectangleTarget:reloadSpeed()
     Target.reloadSpeed(self)
     self.rotationSpeed = self.rotationSpeed * (math.random() < 0.5 and -1 or 1)
 end
 
+---Draws the target on the game
 function RectangleTarget:draw()
     self:debuggingDraw()
 end
 
+---Usual display of the target
 function RectangleTarget:basicDraw()
     graphics.setColor(1, 0, 0)
     graphics.push()
@@ -49,6 +63,7 @@ function RectangleTarget:basicDraw()
     graphics.pop()
 end
 
+---Displays the target and plots additional things to help debug.
 function RectangleTarget:debuggingDraw()
     self:basicDraw()
     graphics.setColor(0, 0, 0)
@@ -79,6 +94,8 @@ function RectangleTarget:debuggingDraw()
     end
 end
 
+---Returns the position of the 4 corners of the rectangle
+---@return table
 function RectangleTarget:getCorners()
     local r = math.sqrt(self.height ^ 2 + self.width ^ 2) / 2
     local alpha = math.atan(self.height / self.width)
@@ -92,6 +109,10 @@ function RectangleTarget:getCorners()
     }
 end
 
+---Tells whether a point (x, y) touches the target
+---@param x number
+---@param y number
+---@return boolean
 function RectangleTarget:isHit(x, y)
     if self.angle == 0 then
         return self.x - self.width / 2 <= x and
@@ -99,14 +120,27 @@ function RectangleTarget:isHit(x, y)
             self.y - self.height / 2 <= y and
             y <= self.y + self.height / 2
     end
+    return self:hasTwoLinesOnTopAndTwoBelow(x, y) and self:isPointBetweenCornersOnAxisX(x, y)
+end
+
+---Tells whether a point (x, y) has 2 lines of the rectangle on top and 2 below
+---@param x number
+---@param y number
+---@return boolean
+function RectangleTarget:hasTwoLinesOnTopAndTwoBelow(x, y)
     local qGreater, qSmaller = 0, 0
     for _, f in pairs({ self.topLeftSideFunc, self.topRightSideFunc, self.belowRightSideFunc, self.belowLeftSideFunc }) do
-        qGreater = qGreater + self:isGreater(f, x, y)
-        qSmaller = qSmaller + self:isSmaller(f, x, y)
+        qGreater = qGreater + (self:isGreater(f, x, y) and 1 or 0)
+        qSmaller = qSmaller + (self:isSmaller(f, x, y) and 1 or 0)
     end
-    if not (qGreater >= 2 and qSmaller >= 2) then
-        return false
-    end
+    return qGreater >= 2 and qSmaller >= 2
+end
+
+---Tells whether a point (x, y) has all cornes on one side or not.
+---@param x number
+---@param y number
+---@return boolean
+function RectangleTarget:isPointBetweenCornersOnAxisX(x, y)
     local qLeft, qRight = 0, 0
     for _, point in pairs(self:getCorners()) do
         if point.x == x and point.y == y then
@@ -124,40 +158,69 @@ function RectangleTarget:isHit(x, y)
     return false
 end
 
+---Tells whether a function f evaluated at x is greater or equal than y
+---@param f function
+---@param x number
+---@param y number
+---@return boolean
 function RectangleTarget:isGreater(f, x, y)
-    return (f(self, x) >= y) and 1 or 0
+    return f(self, x) >= y
 end
 
+---Tells whether a function f evaluated at x is smaller or equal than y
+---@param f function
+---@param x number
+---@param y number
+---@return boolean
 function RectangleTarget:isSmaller(f, x, y)
-    return (f(self, x) <= y) and 1 or 0
+    return f(self, x) <= y
 end
 
+---Returns the x-distance from the target to an x-value
+---@param x number
+---@return number
 function RectangleTarget:deltaX(x)
     return x - self.x
 end
 
+---Returns the slope given the inclination angle of the rectangle
+---@return number
 function RectangleTarget:slope()
     return math.tan(self.angle)
 end
 
+---Returns the orthogonal inclination of the rectangle
+---@return number
 function RectangleTarget:orthogonalSlope()
     return -1 / self:slope()
 end
 
+---Evaluates the side 1 function on x.
+---@param x number
+---@return number
 function RectangleTarget:topLeftSideFunc(x)
     return self:slope() * self:deltaX(x) +
         (self.height / 2) * math.cos(self.angle) * (1 + self:slope() ^ 2) + self.y
 end
 
+---Evaluates the side 2 function on x.
+---@param x number
+---@return number
 function RectangleTarget:belowRightSideFunc(x)
     return self:topLeftSideFunc(x) - (self.height / math.cos(self.angle))
 end
 
+---Evaluates the side 3 function on x.
+---@param x number
+---@return number
 function RectangleTarget:belowLeftSideFunc(x)
     return self:orthogonalSlope() * self:deltaX(x) -
         (self.width / 2) * math.sin(self.angle) * (1 + self:orthogonalSlope() ^ 2) + self.y
 end
 
+---Evaluates the side 4 function on x.
+---@param x number
+---@return number
 function RectangleTarget:topRightSideFunc(x)
     return self:belowLeftSideFunc(x) + (self.width / math.sin(self.angle))
 end

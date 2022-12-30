@@ -7,7 +7,7 @@ CircleTarget.minRadius = TARGET_MIN_RADIUS_CIRC
 CircleTarget.maxRadius = TARGET_MAX_RADIUS_CIRC
 
 ---Constructor returning a new circle target object.
----@param radius number
+---@param radius? number
 ---@return CircleTarget
 function CircleTarget:new(radius)
     local t = Target.new(self)
@@ -20,8 +20,8 @@ function CircleTarget:new(radius)
 end
 
 ---Sets the position of the target
----@param x number
----@param y number
+---@param x? number
+---@param y? number
 function CircleTarget:place(x, y)
     self.x = x or math.random(self.radius, graphics.getWidth() - self.radius)
     self.y = y or math.random(self.radius, graphics.getHeight() - self.radius)
