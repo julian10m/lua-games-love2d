@@ -4,7 +4,7 @@ local RectangleTarget = Target:new()
 RectangleTarget.minSideLength = MIN_SIZE_RECT_TARGET
 RectangleTarget.maxSideLength = MAX_SIZE_RECT_TARGET
 RectangleTarget.angle = TARGET_ROTATION_ANGLE
-RectangleTarget.rotationSpeed = 0.5 * math.pi
+RectangleTarget.rotationSpeed = TARGET_ROTATION_SPEED
 
 function RectangleTarget:new(width, height)
     local t = Target.new(self)
