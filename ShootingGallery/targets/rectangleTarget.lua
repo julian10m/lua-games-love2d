@@ -71,10 +71,9 @@ function RectangleTarget:debuggingDraw()
     graphics.print("cos: " .. roundValue(math.cos(plusAlpha), 5), 5, graphics.getHeight() - 350)
     graphics.print("sin: " .. roundValue(math.sin(plusAlpha), 5), 5, graphics.getHeight() - 400)
     graphics.setColor(1, 1, 0)
-    graphics.circle("fill", self.x + r * math.cos(plusAlpha), self.y + r * math.sin(plusAlpha), 5)
-    graphics.circle("fill", self.x + r * math.cos(math.pi + minusAlpha), self.y + r * math.sin(math.pi + minusAlpha), 5)
-    graphics.circle("fill", self.x + r * math.cos(math.pi + plusAlpha), self.y + r * math.sin(math.pi + plusAlpha), 5)
-    graphics.circle("fill", self.x + r * math.cos(minusAlpha), self.y + r * math.sin(minusAlpha), 5)
+    for _, point in pairs(self:getCorners()) do
+        graphics.circle("fill", point.x, point.y, 5)
+    end
 end
 
 function RectangleTarget:getCorners()
