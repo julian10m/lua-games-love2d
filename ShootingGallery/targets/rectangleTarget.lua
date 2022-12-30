@@ -40,6 +40,15 @@ function RectangleTarget:draw()
     graphics.rotate(self.angle)
     graphics.rectangle("fill", -self.width / 2, -self.height / 2, self.width, self.height) -- origin in the middle
     graphics.pop()
+end
+
+function RectangleTarget:drawDebugging()
+    graphics.setColor(1, 0, 0)
+    graphics.push()
+    graphics.translate(self.x, self.y)
+    graphics.rotate(self.angle)
+    graphics.rectangle("fill", -self.width / 2, -self.height / 2, self.width, self.height) -- origin in the middle
+    graphics.pop()
     graphics.print("angle: " .. self.angle / math.pi, 5, graphics.getHeight() - 50)
     graphics.setColor(0, 0, 0)
     graphics.line(self.x - 200, self:topLeftSideFunc(self.x - 200), self.x + 200, self:topLeftSideFunc(self.x + 200))
