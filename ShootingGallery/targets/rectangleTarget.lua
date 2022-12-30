@@ -9,8 +9,8 @@ RectangleTarget.angle = TARGET_ROTATION_ANGLE
 RectangleTarget.rotationSpeed = TARGET_ROTATION_SPEED
 
 ---Constructor returning a new circle target object.
----@param width number
----@param height number
+---@param width? number
+---@param height? number
 ---@return RectangleTarget
 function RectangleTarget:new(width, height)
     local t = Target.new(self)
