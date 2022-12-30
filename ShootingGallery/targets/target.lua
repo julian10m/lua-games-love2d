@@ -1,6 +1,6 @@
 local Target = {}
-Target.minInitialSpeed = MIN_INITIAL_SPEED_TARGET
-Target.maxInitialSpeed = MAX_INITIAL_SPEED_TARGET
+Target.minInitialSpeed = TARGET_MIN_INITIAL_SPEED
+Target.maxInitialSpeed = TARGET_MAX_INITIAL_SPEED
 
 function Target:new()
     local t = {}

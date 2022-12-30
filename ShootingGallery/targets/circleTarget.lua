@@ -1,8 +1,8 @@
 local Target = require("targets.target")
 
 local CircleTarget = Target:new()
-CircleTarget.minRadius = MIN_RADIUS_CIRC_TARGET
-CircleTarget.maxRadius = MAX_RADIUS_CIRC_TARGET
+CircleTarget.minRadius = TARGET_MIN_RADIUS_CIRC
+CircleTarget.maxRadius = TARGET_MAX_RADIUS_CIRC
 
 function CircleTarget:new(radius)
     local t = Target.new(self)

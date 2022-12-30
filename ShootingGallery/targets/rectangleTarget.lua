@@ -1,8 +1,8 @@
 local Target = require("targets.target")
 
 local RectangleTarget = Target:new()
-RectangleTarget.minSideLength = MIN_SIZE_RECT_TARGET
-RectangleTarget.maxSideLength = MAX_SIZE_RECT_TARGET
+RectangleTarget.minSideLength = TARGET_MIN_SIZE_RECT
+RectangleTarget.maxSideLength = TARGET_MAX_SIZE_RECT
 RectangleTarget.angle = TARGET_ROTATION_ANGLE
 RectangleTarget.rotationSpeed = TARGET_ROTATION_SPEED
 
