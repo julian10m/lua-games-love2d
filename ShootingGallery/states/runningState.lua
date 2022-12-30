@@ -27,7 +27,7 @@ function RunningState:placeNewTarget()
 end
 
 function RunningState:createRandomTarget()
-    if math.random() < 0.5 then
+    if math.random() < PROB_RECTANGLE_TARGET then
         return RectangleTarget:new()
     end
     return CircleTarget:new()
