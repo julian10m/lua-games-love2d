@@ -77,6 +77,19 @@ function RectangleTarget:debuggingDraw()
     graphics.circle("fill", self.x + r * math.cos(minusAlpha), self.y + r * math.sin(minusAlpha), 5)
 end
 
+function RectangleTarget:getCorners()
+    local r = math.sqrt(self.height ^ 2 + self.width ^ 2) / 2
+    local alpha = math.atan(self.height / self.width)
+    local plusAlpha = self.angle + alpha
+    local minusAlpha = self.angle - alpha
+    return {
+        { x = self.x + r * math.cos(plusAlpha), y = self.y + r * math.sin(plusAlpha) },
+        { x = self.x + r * math.cos(math.pi + minusAlpha), y = self.y + r * math.sin(math.pi + minusAlpha) },
+        { x = self.x + r * math.cos(math.pi + plusAlpha), y = self.y + r * math.sin(math.pi + plusAlpha) },
+        { x = self.x + r * math.cos(minusAlpha), y = self.y + r * math.sin(minusAlpha) }
+    }
+end
+
 function RectangleTarget:isHit(x, y)
     if self.angle == 0 then
         return self.x - self.width / 2 <= x and
@@ -89,7 +102,24 @@ function RectangleTarget:isHit(x, y)
         qGreater = qGreater + self:isGreater(f, x, y)
         qSmaller = qSmaller + self:isSmaller(f, x, y)
     end
-    return qGreater >= 2 and qSmaller >= 2
+    if not (qGreater >= 2 and qSmaller >= 2) then
+        return false
+    end
+    local qLeft, qRight = 0, 0
+    for _, point in pairs(self:getCorners()) do
+        if point.x == x and point.y == y then
+            return true
+        end
+        if point.x >= x then
+            qRight = qRight + 1
+        else
+            qLeft = qLeft + 1
+        end
+        if qLeft * qRight > 0 then
+            return true
+        end
+    end
+    return false
 end
 
 function RectangleTarget:isGreater(f, x, y)
