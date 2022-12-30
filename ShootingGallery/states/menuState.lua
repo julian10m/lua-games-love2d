@@ -1,17 +1,31 @@
+---@class MenuState
 local MenuState = {}
 
+---updates the state
+---@param game any
+---@param dt number
 function MenuState:update(game, dt)
     return
 end
 
+---Left click handler
+---@param game any
+---@param x number mouse x-axis
+---@param y number mouse y-axis
 function MenuState:leftClick(game, x, y)
     game:setRunningState()
 end
 
-function MenuState:rightClick(game, x, y, button)
+---Right click handler
+---@param game any
+---@param x number mouse x-axis
+---@param y number mouse y-axis
+function MenuState:rightClick(game, x, y)
     return
 end
 
+---Draws the menu.
+---@param highestScore? number
 function MenuState:draw(highestScore)
     local welcomeMsg = "Click anywhere to begin!"
     if highestScore then welcomeMsg = "The highest score so far is " ..
