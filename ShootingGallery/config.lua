@@ -4,6 +4,8 @@ math.random()
 math.random()
 
 graphics = love.graphics
+graphics.setFont(graphics.newFont(30))
+
 love.mouse.setVisible(false)
 
 mouse = {
@@ -27,13 +29,10 @@ TARGET_MIN_SIZE_RECT = 25
 TARGET_MAX_SIZE_RECT = 100
 TARGET_ROTATION_ANGLE = 0
 
-GAME_FONT = graphics.newFont(30)
-graphics.setFont(GAME_FONT)
-
 sprites = {
     sky = graphics.newImage("sprites/sky.png"),
     crosshair = graphics.newImage("sprites/crosshair.png"),
-    circleTarget = graphics.newImage("sprites/target.png"),
+    -- circleTarget = graphics.newImage("sprites/target.png"),
 }
 
 function distanceBetween(x1, y1, x2, y2)
