@@ -6,9 +6,9 @@ math.random()
 graphics = love.graphics
 love.mouse.setVisible(false)
 
-mouseClickActions = {
-    [1] = function(game, x, y) game:leftClick(x, y) end,
-    [2] = function(game, x, y) game:rightClick(x, y) end,
+mouse = {
+    leftClick = 1,
+    rightClick = 2
 }
 
 INIT_TIMER = 20

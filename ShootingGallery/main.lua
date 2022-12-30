@@ -13,5 +13,9 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-    mouseClickActions[button](game, x, y)
+    if button == mouse.leftClick then
+        game:leftClick(x, y)
+    elseif button == mouse.rightClick then
+        game:rightClick(x, y)
+    end
 end
