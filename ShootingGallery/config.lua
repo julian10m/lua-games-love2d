@@ -36,3 +36,8 @@ sprites = {
 function distanceBetween(x1, y1, x2, y2)
     return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
 end
+
+function roundValue(value, digits)
+    local inverse = 1 / (10 ^ digits)
+    return value - value % inverse
+end

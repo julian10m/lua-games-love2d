@@ -34,6 +34,10 @@ end
 -- end
 
 function RectangleTarget:draw()
+    self:debuggingDraw()
+end
+
+function RectangleTarget:basicDraw()
     graphics.setColor(1, 0, 0)
     graphics.push()
     graphics.translate(self.x, self.y)
@@ -42,14 +46,8 @@ function RectangleTarget:draw()
     graphics.pop()
 end
 
-function RectangleTarget:drawDebugging()
-    graphics.setColor(1, 0, 0)
-    graphics.push()
-    graphics.translate(self.x, self.y)
-    graphics.rotate(self.angle)
-    graphics.rectangle("fill", -self.width / 2, -self.height / 2, self.width, self.height) -- origin in the middle
-    graphics.pop()
-    graphics.print("angle: " .. self.angle / math.pi, 5, graphics.getHeight() - 50)
+function RectangleTarget:debuggingDraw()
+    self:basicDraw()
     graphics.setColor(0, 0, 0)
     graphics.line(self.x - 200, self:topLeftSideFunc(self.x - 200), self.x + 200, self:topLeftSideFunc(self.x + 200))
     graphics.setColor(0, 0, 1)
@@ -62,24 +60,21 @@ function RectangleTarget:drawDebugging()
     graphics.setColor(0, 0, 0)
     local r = math.sqrt(self.height ^ 2 + self.width ^ 2) / 2
     local alpha = math.atan(self.height / self.width)
-
-    local theta = self.angle + alpha
+    local plusAlpha = self.angle + alpha
+    local minusAlpha = self.angle - alpha
+    graphics.circle("line", self.x, self.y, r)
     graphics.print("h: " .. self.height, 5, graphics.getHeight() - 100)
     graphics.print("w: " .. self.width, 5, graphics.getHeight() - 150)
-    graphics.print("r: " .. r, 5, graphics.getHeight() - 200)
-    graphics.print("alpha: " .. alpha, 5, graphics.getHeight() - 250)
-    graphics.print("theta: " .. theta, 5, graphics.getHeight() - 300)
-    graphics.print("cos: " .. math.cos(theta), 5, graphics.getHeight() - 350)
-    graphics.print("sin: " .. math.sin(theta), 5, graphics.getHeight() - 400)
-    graphics.circle("line", self.x, self.y, r)
+    graphics.print("r: " .. roundValue(r, 5), 5, graphics.getHeight() - 200)
+    graphics.print("alpha: " .. roundValue(alpha, 5), 5, graphics.getHeight() - 250)
+    graphics.print("angle: " .. roundValue(self.angle, 5), 5, graphics.getHeight() - 300)
+    graphics.print("cos: " .. roundValue(math.cos(plusAlpha), 5), 5, graphics.getHeight() - 350)
+    graphics.print("sin: " .. roundValue(math.sin(plusAlpha), 5), 5, graphics.getHeight() - 400)
     graphics.setColor(1, 1, 0)
-    graphics.circle("fill", self.x + r * math.cos(theta), self.y + r * math.sin(theta), 5)
-    graphics.circle("fill", self.x + r * math.cos(math.pi - alpha + self.angle),
-        self.y + r * math.sin(math.pi - alpha + self.angle), 5)
-    graphics.circle("fill", self.x + r * math.cos(math.pi + alpha + self.angle),
-        self.y + r * math.sin(math.pi + alpha + self.angle), 5)
-    graphics.circle("fill", self.x + r * math.cos(-alpha + self.angle), self.y + r * math.sin(-alpha + self.angle), 5)
-    graphics.setColor(1, 1, 1)
+    graphics.circle("fill", self.x + r * math.cos(plusAlpha), self.y + r * math.sin(plusAlpha), 5)
+    graphics.circle("fill", self.x + r * math.cos(math.pi + minusAlpha), self.y + r * math.sin(math.pi + minusAlpha), 5)
+    graphics.circle("fill", self.x + r * math.cos(math.pi + plusAlpha), self.y + r * math.sin(math.pi + plusAlpha), 5)
+    graphics.circle("fill", self.x + r * math.cos(minusAlpha), self.y + r * math.sin(minusAlpha), 5)
 end
 
 function RectangleTarget:isHit(x, y)
