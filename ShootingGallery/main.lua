@@ -1,7 +1,8 @@
+---@type Game game
 local game = dofile("game.lua")
 
 function love.load()
-    game:restart()
+    game:setMenuState()
 end
 
 function love.update(dt)
