@@ -1,5 +1,10 @@
 ---@class Target
+---@field protected x number
+---@field protected y number
+---@field protected xSpeed number
+---@field protected ySpeed number
 local Target = {}
+
 Target.minInitialSpeed = TARGET_MIN_INITIAL_SPEED
 Target.maxInitialSpeed = TARGET_MAX_INITIAL_SPEED
 
@@ -51,7 +56,6 @@ function Target:draw() end
 ---Tells whether a point (x, y) touches the target
 ---@param x number
 ---@param y number
----@return boolean
 function Target:isHit(x, y) end
 
 return Target

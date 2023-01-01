@@ -2,7 +2,9 @@
 local Target = require("targets.target")
 
 ---@class CircleTarget:Target
+---@field private radius number
 local CircleTarget = Target:new()
+
 CircleTarget.minRadius = TARGET_MIN_RADIUS_CIRC
 CircleTarget.maxRadius = TARGET_MAX_RADIUS_CIRC
 

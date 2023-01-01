@@ -2,7 +2,12 @@
 local Target = require("targets.target")
 
 ---@class RectangleTarget:Target
+---@field private width number
+---@field private height number
+---@field private angle number
+---@field private rotationSpeed number
 local RectangleTarget = Target:new()
+
 RectangleTarget.minSideLength = TARGET_MIN_SIZE_RECT
 RectangleTarget.maxSideLength = TARGET_MAX_SIZE_RECT
 RectangleTarget.angle = TARGET_ROTATION_ANGLE
@@ -79,7 +84,6 @@ function RectangleTarget:debuggingDraw()
     local r = math.sqrt(self.height ^ 2 + self.width ^ 2) / 2
     local alpha = math.atan(self.height / self.width)
     local plusAlpha = self.angle + alpha
-    local minusAlpha = self.angle - alpha
     graphics.circle("line", self.x, self.y, r)
     graphics.print("h: " .. self.height, 5, graphics.getHeight() - 100)
     graphics.print("w: " .. self.width, 5, graphics.getHeight() - 150)
