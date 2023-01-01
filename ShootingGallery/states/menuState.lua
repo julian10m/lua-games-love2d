@@ -2,14 +2,14 @@
 local MenuState = {}
 
 ---updates the state
----@param game any
+---@param game Game
 ---@param dt number
 function MenuState:update(game, dt)
     return
 end
 
 ---Left click handler
----@param game any
+---@param game Game
 ---@param x number mouse x-axis
 ---@param y number mouse y-axis
 function MenuState:leftClick(game, x, y)
@@ -17,7 +17,7 @@ function MenuState:leftClick(game, x, y)
 end
 
 ---Right click handler
----@param game any
+---@param game Game
 ---@param x number mouse x-axis
 ---@param y number mouse y-axis
 function MenuState:rightClick(game, x, y)

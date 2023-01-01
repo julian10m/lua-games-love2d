@@ -13,14 +13,14 @@ function FinishedState:new(score)
 end
 
 ---Updates the state
----@param game any
+---@param game Game
 ---@param dt number
 function FinishedState:update(game, dt)
     return
 end
 
 ---Left click handler
----@param game any
+---@param game Game
 ---@param x number mouse x-axis
 ---@param y number mouse y-axis
 function FinishedState:leftClick(game, x, y)
@@ -28,7 +28,7 @@ function FinishedState:leftClick(game, x, y)
 end
 
 ---Right click handler
----@param game any
+---@param game Game
 ---@param x number mouse x-axis
 ---@param y number mouse y-axis
 function FinishedState:rightClick(game, x, y)

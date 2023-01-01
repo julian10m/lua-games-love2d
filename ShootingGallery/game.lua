@@ -8,6 +8,8 @@ local RunningState = require("states.runningState")
 local FinishedState = require("states.finishedState")
 
 ---@class Game
+---@field private state MenuState|RunningState|FinishedState
+---@field private highestScore number
 local Game = {}
 
 ---Sets the game into a new running state.
@@ -23,9 +25,14 @@ end
 ---Sets the game into the finished state.
 ---@param score number
 function Game:setFinishedState(score)
+    self.state = FinishedState:new(score)
+end
+
+---Updates the highest score
+---@param score number
+function Game:updateHighestScore(score)
     self.highestScore = self.highestScore or score
     self.highestScore = (score > self.highestScore) and score or self.highestScore
-    self.state = FinishedState:new(score)
 end
 
 ---Updates the game state.

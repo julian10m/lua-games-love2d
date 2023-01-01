@@ -42,18 +42,19 @@ function RunningState:createRandomTarget()
 end
 
 ---Updates the state of the game after dt seconds.
----@param game any
+---@param game Game
 ---@param dt number
 function RunningState:update(game, dt)
     self.timer = math.max(self.timer - dt, 0)
     if self.timer == 0 then
+        game:updateHighestScore(self.score)
         game:setFinishedState(self.score)
     end
     self.target:update(dt)
 end
 
 ---Left click handler
----@param game any
+---@param game Game
 ---@param x number mouse x-axis
 ---@param y number mouse y-axis
 function RunningState:leftClick(game, x, y)
@@ -61,7 +62,7 @@ function RunningState:leftClick(game, x, y)
 end
 
 ---Right click handler
----@param game any
+---@param game Game
 ---@param x number mouse x-axis
 ---@param y number mouse y-axis
 function RunningState:rightClick(game, x, y)
@@ -88,7 +89,7 @@ function RunningState:handleShooting(x, y, deltaScore, deltaTimer)
 end
 
 ---Draws the current state of the running game.
----@param highestScore any
+---@param highestScore number
 function RunningState:draw(highestScore)
     graphics.setColor(1, 1, 1)
     local scoreMsg = "Score: " .. self.score
