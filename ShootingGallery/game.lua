@@ -1,5 +1,3 @@
-dofile("config.lua")
-
 ---@type MenuState MenuState
 local MenuState = require("states.menuState")
 ---@type RunningState RunningState

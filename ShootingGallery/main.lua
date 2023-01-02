@@ -1,5 +1,6 @@
+require("config")
 ---@type Game game
-local game = dofile("game.lua")
+local game = require("game")
 
 function love.load()
     game:setMenuState()
