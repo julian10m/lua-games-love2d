@@ -1,13 +1,21 @@
 local graphics = love.graphics
 local movements = {
-    d = {dir = "x", delta = 1},
-    w = {dir = "y", delta = 1},
-    a = {dir = "x", delta = -1},
-    s = {dit = "y", delta = -1}
+    d = { dir = "x", delta = 1 },
+    w = { dir = "y", delta = -1 },
+    a = { dir = "x", delta = -1 },
+    s = { dir = "y", delta = 1 }
 }
 MIN_DIST = 30
 
-function distanceBetween(x1, y1, x2, y2) end
+---Returns the Euclidean distance between points (x1, y1) and (x2, y2)
+---@param x1 number
+---@param y1 number
+---@param x2 number
+---@param y2 number
+---@return number
+function distanceBetween(x1, y1, x2, y2)
+    return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
+end
 
 function love.load()
     sprites = {}
@@ -16,15 +24,17 @@ function love.load()
     sprites.player = graphics.newImage('sprites/player.png')
     sprites.zombie = graphics.newImage('sprites/zombie.png')
     player = {}
-    player.x = graphics.getWidth()/2
-    player.y = graphics.getHeight()/2
+    player.x = graphics.getWidth() / 2
+    player.y = graphics.getHeight() / 2
+    player.angle = 0
+    player.speed = 120
     graphics.setFont(graphics.newFont(30))
     zombies = {}
     bullets = {}
     gameState = 1
-    maxTime = 2
+    maxTime = 1
     timer = maxTime
-    score = 0 
+    score = 0
 end
 
 function love.update(dt)
@@ -32,7 +42,7 @@ function love.update(dt)
         return
     end
     for key, key_action in pairs(movements) do
-        if love.keyboard.isDown(k) then
+        if love.keyboard.isDown(key) then
             player[key_action.dir] = player[key_action.dir] + key_action.delta * player.speed * dt
         end
     end
@@ -62,7 +72,7 @@ function love.update(dt)
         if b.x < 0 or b.y < 0 or b.x > graphics.getWidth() or b.y > graphics.getHeight() then
             table.remove(bullets, i)
         else
-            for j=#zombies, 1, -1 do
+            for j = #zombies, 1, -1 do
                 local z = zombies[j]
                 if distanceBetween(z.x, z.y, b.x, b.y) < MIN_DIST then
                     table.remove(zombies, j)
@@ -82,6 +92,7 @@ function love.update(dt)
         end
     end
 end
+
 function love.draw()
     graphics.draw(sprites.background, 0, 0)
 
@@ -128,14 +139,14 @@ function love.draw()
                 sprites.bullet:getHeight() / 2
             )
         end
-        graphics.printf(
-            "Score: " .. score,
-            0,
-            graphics.getHeight() - 100,
-            graphics.getWidth(),
-            "center"
-        )
     end
+    graphics.printf(
+        "Score: " .. score,
+        0,
+        graphics.getHeight() - 100,
+        graphics.getWidth(),
+        "center"
+    )
 end
 
 function love.keypressed(k)
@@ -145,7 +156,8 @@ function love.keypressed(k)
 end
 
 function love.mousepressed(x, y, button)
-    if button == mouse.leftClick then
+    if button == 1 then
+        --if button == mouse.leftClick then
         if gameState == 1 then
             gameState = 2
             maxTime = 2
@@ -185,8 +197,7 @@ function spawnZombie()
         zombie.x = math.random() * graphics.getWidth()
         zombie.y = graphics.getHeight() + 30
     end
-    zombie.x = math.random() * graphics.getWidth()
-    zombie.speed = 100
+    zombie.speed = 130
     table.insert(zombies, zombie)
 end
 
@@ -194,7 +205,7 @@ function spawnBullet()
     local bullet = {}
     bullet.x = player.x
     bullet.y = player.y
-    bullet.speed = 100
+    bullet.speed = 130
     bullet.angle = playerMouseAngle()
     table.insert(bullets, bullet)
 end
