@@ -6,14 +6,14 @@ require("libraries.show")
 local cam = cameraFile()
 graphics = love.graphics
 
-local sprites = {}
-sprites.playerSheet = love.graphics.newImage("sprites.playerSheet.png")
-sprites.enemySheet = love.graphics.newImage("sprites.enemySheet.png")
-sprites.background = love.graphics.newImage("sprtes.background.png")
+sprites = {}
+sprites.playerSheet = love.graphics.newImage("sprites/playerSheet.png")
+sprites.enemySheet = love.graphics.newImage("sprites/enemySheet.png")
+sprites.background = love.graphics.newImage("sprites/background.png")
 local grid = anim8.newGrid(614, 564, sprites.playerSheet:getWidth(), sprites.playerSheet:getHeight())
 local enemyGrid = anim8.newGrid(100, 79, sprites.enemySheet:getWidth(), sprites.enemySheet:getHeight())
-local animations = {}
-local platforms = {}
+animations = {}
+platforms = {}
 
 animations.idle = anim8.newAnimation(grid("1-15", 1), 0.05)
 animations.jump = anim8.newAnimation(grid("1-7", 2), 0.05)
@@ -30,16 +30,16 @@ player.animation = animations.run
 player.direction = 1
 player.isGrounded = true
 player.isMoving = false
-local enemies = require("enemy")
+require("enemy")
 local sounds = {}
-sounds.jump = love.audio.newSource("audio.jump.wav", "static")
-sounds.music = love.audio.newSource("audio.music.mp3", "stream")
+sounds.jump = love.audio.newSource("audio/jump.wav", "static")
+sounds.music = love.audio.newSource("audio/music.mp3", "stream")
 sounds.music:setLooping(true)
 sounds.music:setVolume(0.5)
 sounds.music:play()
 
 local dangerZone = world:newRectangleCollider(-500, 800, 5000, 50, { collision_class = COLLISION_CLASSES.Danger })
-dangerZone.setType("static")
+dangerZone:setType("static")
 
 function love.load()
     love.window.setMode(1000, 768)
@@ -54,7 +54,6 @@ function love.load()
         data()
     end
     loadMap(saveData.currentLevel)
-    flagX, flagY = 0, 0
 end
 
 function love.update(dt)
@@ -99,7 +98,7 @@ function love.update(dt)
 
     player.animation:update(dt)
     updateEnemies(dt)
-    cam.lookAt(px, love.graphics.getHeight() / 2)
+    cam:lookAt(px, love.graphics.getHeight() / 2)
     local colliders = world:queryCircleArea(flagX, flagY, 10, { COLLISION_CLASSES.Player })
     if #colliders > 0 then
         loadMap("level2")
@@ -109,17 +108,17 @@ end
 function love.draw()
     love.graphics.draw(sprites.background, 0, 0)
     cam:attach()
-    gameMap:drawLayer(gameMap.layers["Tile Layer 1"])
+    gameMap:drawLayer(gameMap.layers.Layer)
     world:draw()
     local px, py = player:getPosition()
     player.animation:draw(sprites.playerSheet, px, py, nil, 0.25 * player.direction, 0.25, 130, 300)
     drawEnemies()
-    cam:deattach()
+    cam:detach()
 end
 
 function love.keypressed(key)
     if key == "up" and player.isGrounded then
-        player:applyLinearImpulse(0, -1000)
+        player:applyLinearImpulse(0, -4000)
         sounds.jump:play()
     end
 end
@@ -137,7 +136,7 @@ function loadMap(mapName)
     saveData.currentLevel = mapName
     love.filesystem.write("data.lua", table.show(saveData, "saveData"))
     destroyAll()
-    gameMap = sti("maps." .. mapName .. ".lua")
+    gameMap = sti("maps/" .. mapName .. ".lua")
     for i, obj in ipairs(gameMap.layers.Start.objects) do
         player:setPosition(obj.x, obj.y)
     end
