@@ -1,40 +1,13 @@
-local graphics = love.graphics
-local movements = {
-    d = { dir = "x", delta = 1 },
-    w = { dir = "y", delta = -1 },
-    a = { dir = "x", delta = -1 },
-    s = { dir = "y", delta = 1 }
-}
-MIN_DIST = 30
-
----Returns the Euclidean distance between points (x1, y1) and (x2, y2)
----@param x1 number
----@param y1 number
----@param x2 number
----@param y2 number
----@return number
-function distanceBetween(x1, y1, x2, y2)
-    return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
-end
+require("config")
+local Bullet = require("characters.bullet")
+local Player = require("characters.player")
+local Zombie = require("characters.zombie")
 
 function love.load()
-    sprites = {}
-    sprites.background = graphics.newImage('sprites/background.png')
-    sprites.bullet = graphics.newImage('sprites/bullet.png')
-    sprites.player = graphics.newImage('sprites/player.png')
-    sprites.zombie = graphics.newImage('sprites/zombie.png')
-    player = {}
-    player.x = graphics.getWidth() / 2
-    player.y = graphics.getHeight() / 2
-    player.angle = 0
-    player.speed = 120
-    graphics.setFont(graphics.newFont(30))
+    player = Player:new()
     zombies = {}
     bullets = {}
-    gameState = 1
-    maxTime = 1
     timer = maxTime
-    score = 0
 end
 
 function love.update(dt)
@@ -49,9 +22,10 @@ function love.update(dt)
     player.angle = player.angle + 0.01 * dt
     local isTouched = false
     for i, z in ipairs(zombies) do
-        local angle = playerZombieAngle(z)
+        local angle = playerZombieAngle(z.x, z.y)
         z.x = z.x + z.speed * math.cos(angle) * dt
         z.y = z.y + z.speed * math.sin(angle) * dt
+        z.angle = playerZombieAngle(z.x, z.y)
         if distanceBetween(z.x, z.y, player.x, player.y) < MIN_DIST then
             isTouched = true
             break
@@ -86,7 +60,7 @@ function love.update(dt)
     if gameState == 2 then
         timer = timer - dt
         if timer <= 0 then
-            spawnZombie()
+            table.insert(zombies, Zombie:new())
             maxTime = 0.95 * maxTime
             timer = maxTime
         end
@@ -105,39 +79,12 @@ function love.draw()
             "center"
         )
     else
-        graphics.draw(
-            sprites.player,
-            player.x,
-            player.y,
-            playerMouseAngle(),
-            nil,
-            nil,
-            sprites.player:getWidth() / 2,
-            sprites.player:getHeight() / 2
-        )
+        player:draw()
         for _, zombie in ipairs(zombies) do
-            graphics.draw(
-                sprites.zombie,
-                zombie.x,
-                zombie.y,
-                playerZombieAngle(zombie),
-                nil,
-                nil,
-                sprites.zombie:getWidth() / 2,
-                sprites.zombie:getHeight() / 2
-            )
+            zombie:draw()
         end
         for _, bullet in ipairs(bullets) do
-            graphics.draw(
-                sprites.bullet,
-                bullet.x,
-                bullet.y,
-                bullet.angle,
-                0.5,
-                nil,
-                sprites.bullet:getWidth() / 2,
-                sprites.bullet:getHeight() / 2
-            )
+            bullet:draw()
         end
     end
     graphics.printf(
@@ -151,7 +98,7 @@ end
 
 function love.keypressed(k)
     if k == "space" then
-        spawnZombie()
+        table.insert(zombies, Zombie:new())
     end
 end
 
@@ -164,48 +111,7 @@ function love.mousepressed(x, y, button)
             timer = 2
             score = 0
         else
-            spawnBullet()
+            table.insert(bullets, Bullet:new(player.x, player.y, playerMouseAngle()))
         end
     end
-end
-
-function playerMouseAngle()
-    return playerAngle(love.mouse.getX(), love.mouse.getY())
-end
-
-function playerZombieAngle(zombie)
-    return math.pi + playerAngle(zombie.x, zombie.y)
-end
-
-function playerAngle(x, y)
-    return math.atan2(y - player.y, x - player.x)
-end
-
-function spawnZombie()
-    local zombie = {}
-    local side = math.random(1, 4)
-    if side == 1 then
-        zombie.x = -30
-        zombie.y = math.random() * graphics.getHeight()
-    elseif side == 2 then
-        zombie.x = graphics.getWidth() + 30
-        zombie.y = math.random() * graphics.getHeight()
-    elseif side == 3 then
-        zombie.x = math.random() * graphics.getWidth()
-        zombie.y = -30
-    else
-        zombie.x = math.random() * graphics.getWidth()
-        zombie.y = graphics.getHeight() + 30
-    end
-    zombie.speed = 130
-    table.insert(zombies, zombie)
-end
-
-function spawnBullet()
-    local bullet = {}
-    bullet.x = player.x
-    bullet.y = player.y
-    bullet.speed = 130
-    bullet.angle = playerMouseAngle()
-    table.insert(bullets, bullet)
 end
