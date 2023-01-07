@@ -8,6 +8,9 @@ movements = {
     s = { dir = "y", delta = 1 }
 }
 
+mouse = {}
+mouse.leftClick = 1
+
 MIN_DIST = 30
 maxTime = 1
 gameState = 1
@@ -27,16 +30,4 @@ sprites.zombie = graphics.newImage('sprites/zombie.png')
 ---@return number
 function distanceBetween(x1, y1, x2, y2)
     return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
-end
-
-function playerMouseAngle()
-    return playerAngle(love.mouse.getX(), love.mouse.getY())
-end
-
-function playerZombieAngle(x, y)
-    return math.pi + playerAngle(x, y)
-end
-
-function playerAngle(x, y)
-    return math.atan((y - player.y) / (x - player.x))
 end

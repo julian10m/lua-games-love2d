@@ -10,17 +10,21 @@ function Player:new(x, y, angle)
     return p
 end
 
-function Player:draw()
+function Player:draw(x, y)
     graphics.draw(
         self.sprite,
         self.x,
         self.y,
-        playerMouseAngle(),
+        self:getAngle(x, y),
         nil,
         nil,
         self.sprite:getWidth() / 2,
         self.sprite:getHeight() / 2
     )
+end
+
+function Player:getAngle(x, y)
+    return math.atan((y - self.y) / (x - self.x))
 end
 
 return Player

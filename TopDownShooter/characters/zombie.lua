@@ -2,12 +2,12 @@ local Zombie = {}
 Zombie.speed = 130
 Zombie.sprite = sprites.zombie
 
-function Zombie:new(x, y, angle)
+function Zombie:new(x, y)
     local z = {}
     if x and y and angle then
-        z.x, z.y, z.angle = x, y, angle
+        z.x, z.y, z.angle = x, y
     else
-        z.x, z.y, z.angle = self:getSpawnPosition()
+        z.x, z.y = self:getSpawnPosition()
     end
     setmetatable(z, self)
     self.__index = self
@@ -25,15 +25,15 @@ function Zombie:getSpawnPosition()
     else
         x, y = math.random() * graphics.getWidth(), graphics.getHeight() + 30
     end
-    return x, y, playerZombieAngle(x, y)
+    return x, y
 end
 
-function Zombie:draw()
+function Zombie:draw(angle)
     graphics.draw(
         self.sprite,
         self.x,
         self.y,
-        self.angle,
+        angle,
         nil,
         nil,
         self.sprite:getWidth() / 2,
