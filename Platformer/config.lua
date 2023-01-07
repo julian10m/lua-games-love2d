@@ -1,5 +1,5 @@
 local wf = require("libraries.windfield.windfield")
-local gx, gy = 0, 100
+local gx, gy = 0, 800
 local world = wf.newWorld(gx, gy, false)
 
 COLLISION_CLASSES = {
