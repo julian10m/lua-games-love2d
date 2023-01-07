@@ -1,0 +1,6 @@
+[submodule "Platformer/libraries/Platformer/libraries/anim8"]
+	path = Platformer/libraries/Platformer/libraries/anim8
+	url = https://github.com/kikito/anim8.git
+[submodule "Platformer/libraries/anim8"]
+	path = Platformer/libraries/anim8
+	url = https://github.com/kikito/anim8.git
