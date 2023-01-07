@@ -4,3 +4,6 @@
 [submodule "Platformer/libraries/anim8"]
 	path = Platformer/libraries/anim8
 	url = https://github.com/kikito/anim8.git
+[submodule "Platformer/libraries/windfield"]
+	path = Platformer/libraries/windfield
+	url = https://github.com/a327ex/windfield.git
