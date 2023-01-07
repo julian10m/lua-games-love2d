@@ -7,3 +7,12 @@
 [submodule "Platformer/libraries/windfield"]
 	path = Platformer/libraries/windfield
 	url = https://github.com/a327ex/windfield.git
+[submodule "Simple-Tiled-Implementation"]
+	path = Simple-Tiled-Implementation
+	url = https://github.com/karai17/Simple-Tiled-Implementation
+[submodule "Platformer/libraries/Simple-Tiled-Implementation"]
+	path = Platformer/libraries/Simple-Tiled-Implementation
+	url = https://github.com/karai17/Simple-Tiled-Implementation
+[submodule "Platformer/libraries/hump"]
+	path = Platformer/libraries/hump
+	url = https://github.com/vrld/hump
