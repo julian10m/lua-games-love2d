@@ -28,6 +28,12 @@ function Zombie:getSpawnPosition()
     return x, y
 end
 
+function Zombie:update(angle, dt)
+    local dist = self.speed * dt
+    self.x = self.x + dist * math.cos(angle)
+    self.y = self.y + dist * math.sin(angle)
+end
+
 function Zombie:draw(angle)
     graphics.draw(
         self.sprite,
