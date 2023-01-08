@@ -1,4 +1,5 @@
 ---@class FinishedState
+---@field private score number
 local FinishedState = {}
 
 ---Constructor

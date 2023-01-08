@@ -1,9 +1,19 @@
-local Bullet = require("characters.bullet")
+---@type Utils Utils
+local Utils = require("utils")
+---@type Player Player
 local Player = require("characters.player")
+---@type Bullet Bullet
+local Bullet = require("characters.bullet")
+---@type Zombie Zombie
 local Zombie = require("characters.zombie")
 
 ---@class RunningState
+---@field private player Player
+---@field private zombies Zombie[]
+---@field private bullets Bullet[]
+---@field private timer number
 local RunningState = {}
+
 RunningState.zombieMaxSpawnTime = ZOMBIE_MAX_SPAWN_TIME
 RunningState.score = 0
 
@@ -12,8 +22,7 @@ RunningState.score = 0
 function RunningState:new()
     local state = {}
     state.player = Player:new()
-    state.zombies = {}
-    state.bullets = {}
+    state.zombies, state.bullets = {}, {}
     state.timer = self.zombieMaxSpawnTime
     setmetatable(state, self)
     self.__index = self
@@ -30,16 +39,21 @@ function RunningState:update(game, dt)
     self:updateTimer(dt)
 end
 
+---Updates the position of each zombie and in case one touches the player, switches to finished state.
+---@param game Game
+---@param dt number
 function RunningState:updateZombies(game, dt)
     for _, z in ipairs(self.zombies) do
         z:update(math.pi + self.player:getAngle(z.x, z.y), dt)
-        if haveCollided(z, self.player) then
+        if Utils:haveCollided(z, self.player) then
             game:updateHighestScore(self.score)
             game:setFinishedState(self.score)
         end
     end
 end
 
+---Updates the position of each bullet, removing those off screen and intersected zombies
+---@param dt number
 function RunningState:updateBullets(dt)
     for i = #self.bullets, 1, -1 do
         local b = self.bullets[i]
@@ -49,7 +63,7 @@ function RunningState:updateBullets(dt)
         else
             for j = #self.zombies, 1, -1 do
                 local z = self.zombies[j]
-                if haveCollided(z, b) then
+                if Utils:haveCollided(z, b) then
                     table.remove(self.zombies, j)
                     table.remove(self.bullets, i)
                     self.score = self.score + 1
@@ -60,6 +74,8 @@ function RunningState:updateBullets(dt)
     end
 end
 
+---Updates and the timer and adds a new zombie when it reaches 0.
+---@param dt number
 function RunningState:updateTimer(dt)
     self.timer = self.timer - dt
     if self.timer <= 0 then
@@ -88,18 +104,22 @@ function RunningState:draw(highestScore)
     self:drawScore(highestScore)
 end
 
+---Draws the zombies in the current running state.
 function RunningState:drawZombies()
     for _, zombie in ipairs(self.zombies) do
         zombie:draw(math.pi + self.player:getAngle(zombie.x, zombie.y))
     end
 end
 
+---Draws the bullets in the current running state.
 function RunningState:drawBullets()
     for _, bullet in ipairs(self.bullets) do
         bullet:draw()
     end
 end
 
+---Draws the score board
+---@param highestScore number
 function RunningState:drawScore(highestScore)
     local scoreMsg = "Score: " .. self.score
     if highestScore then scoreMsg = scoreMsg .. "\nHighest score: " .. highestScore end
