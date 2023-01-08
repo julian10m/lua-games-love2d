@@ -1,3 +1,6 @@
+---@type Utils Utils
+local Utils = require("utils")
+
 ---@type Target Target
 local Target = require("targets.target")
 
@@ -41,7 +44,7 @@ end
 ---@param y number
 ---@return boolean
 function CircleTarget:isHit(x, y)
-    return distanceBetween(x, y, self.x, self.y) < self.radius
+    return Utils:distanceBetween(x, y, self.x, self.y) < self.radius
 end
 
 return CircleTarget

@@ -1,3 +1,6 @@
+---@type Utils Utils
+local Utils = require("utils")
+
 ---@type Target Target
 local Target = require("targets.target")
 
@@ -87,11 +90,11 @@ function RectangleTarget:debuggingDraw()
     graphics.circle("line", self.x, self.y, r)
     graphics.print("h: " .. self.height, 5, graphics.getHeight() - 100)
     graphics.print("w: " .. self.width, 5, graphics.getHeight() - 150)
-    graphics.print("r: " .. roundValue(r, 5), 5, graphics.getHeight() - 200)
-    graphics.print("alpha: " .. roundValue(alpha, 5), 5, graphics.getHeight() - 250)
-    graphics.print("angle: " .. roundValue(self.angle, 5), 5, graphics.getHeight() - 300)
-    graphics.print("cos: " .. roundValue(math.cos(plusAlpha), 5), 5, graphics.getHeight() - 350)
-    graphics.print("sin: " .. roundValue(math.sin(plusAlpha), 5), 5, graphics.getHeight() - 400)
+    graphics.print("r: " .. Utils:roundValue(r, 5), 5, graphics.getHeight() - 200)
+    graphics.print("alpha: " .. Utils:roundValue(alpha, 5), 5, graphics.getHeight() - 250)
+    graphics.print("angle: " .. Utils:roundValue(self.angle, 5), 5, graphics.getHeight() - 300)
+    graphics.print("cos: " .. Utils:roundValue(math.cos(plusAlpha), 5), 5, graphics.getHeight() - 350)
+    graphics.print("sin: " .. Utils:roundValue(math.sin(plusAlpha), 5), 5, graphics.getHeight() - 400)
     graphics.setColor(1, 1, 0)
     for _, point in pairs(self:getCorners()) do
         graphics.circle("fill", point.x, point.y, 5)

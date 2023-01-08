@@ -16,22 +16,13 @@ function MenuState:leftClick(game, x, y)
     game:setRunningState()
 end
 
----Right click handler
----@param game Game
----@param x number mouse x-axis
----@param y number mouse y-axis
-function MenuState:rightClick(game, x, y)
-    return
-end
-
 ---Draws the menu.
 ---@param highestScore? number
 function MenuState:draw(highestScore)
-    local welcomeMsg = "Click anywhere to begin!"
+    graphics.printf("Click anywhere to begin!", 0, 50, graphics.getWidth(), "center")
     if highestScore then
-        welcomeMsg = welcomeMsg .. "\n\nHighest score: " .. highestScore
+        graphics.printf("\nHighest score: " .. highestScore, 0, graphics.getHeight() - 100, graphics.getWidth(), "center")
     end
-    graphics.printf(welcomeMsg, 0, graphics.getHeight() / 2, graphics.getWidth(), "center")
 end
 
 return MenuState

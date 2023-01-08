@@ -4,6 +4,10 @@ local CircleTarget = require("targets.circleTarget")
 local RectangleTarget = require("targets.rectangleTarget")
 
 ---@class RunningState
+---@field private target CircleTarget|RectangleTarget
+---@field private score number
+---@field private timer number
+---@field private attempts table
 local RunningState = {}
 
 RunningState.score = INIT_SCORE
@@ -75,14 +79,12 @@ end
 ---@param deltaScore number
 ---@param deltaTimer number
 function RunningState:handleShooting(x, y, deltaScore, deltaTimer)
+    self.timer = self.timer - deltaTimer
     if self.target:isHit(x, y) then
         self:placeNewTarget()
         self.score = self.score + deltaScore
-        self.timer = self.timer - deltaTimer
     else
-        if self.score > 0 then
-            self.score = self.score - 1
-        end
+        self.score = math.max(self.score - deltaScore, 0)
         self.target:reloadSpeed()
         table.insert(self.attempts, { x = x, y = y })
     end
@@ -92,16 +94,25 @@ end
 ---@param highestScore number
 function RunningState:draw(highestScore)
     graphics.setColor(1, 1, 1)
+    self:drawScoreAndTimer(highestScore)
+    self.target:draw()
+    graphics.setColor(0, 0, 0)
+    self:drawAttempts()
+    graphics.setColor(1, 1, 1)
+end
+
+function RunningState:drawScoreAndTimer(highestScore)
     local scoreMsg = "Score: " .. self.score
     if highestScore then scoreMsg = scoreMsg .. "\nHighest score: " .. highestScore end
     graphics.print(scoreMsg, 25, 5)
     graphics.print("Time left: " .. self.timer - self.timer % 0.001, graphics.getWidth() - 300, 5)
-    self.target:draw()
-    graphics.setColor(0, 0, 0)
+end
+
+---Draws the current attempts
+function RunningState:drawAttempts()
     for _, point in pairs(self.attempts) do
         graphics.circle("line", point.x, point.y, 2)
     end
-    graphics.setColor(1, 1, 1)
 end
 
 return RunningState
