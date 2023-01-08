@@ -79,12 +79,12 @@ end
 ---@param deltaScore number
 ---@param deltaTimer number
 function RunningState:handleShooting(x, y, deltaScore, deltaTimer)
+    self.timer = self.timer - deltaTimer
     if self.target:isHit(x, y) then
         self:placeNewTarget()
         self.score = self.score + deltaScore
-        self.timer = self.timer - deltaTimer
     else
-        self.score = math.max(self.score - 1, 0)
+        self.score = math.max(self.score - deltaScore, 0)
         self.target:reloadSpeed()
         table.insert(self.attempts, { x = x, y = y })
     end
