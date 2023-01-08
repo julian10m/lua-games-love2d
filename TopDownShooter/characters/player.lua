@@ -10,6 +10,14 @@ function Player:new(x, y, angle)
     return p
 end
 
+function Player:update(dt)
+    for key, key_action in pairs(movements) do
+        if love.keyboard.isDown(key) then
+            self[key_action.dir] = self[key_action.dir] + key_action.delta * self.speed * dt
+        end
+    end
+end
+
 function Player:draw(x, y)
     graphics.draw(
         self.sprite,
@@ -24,7 +32,7 @@ function Player:draw(x, y)
 end
 
 function Player:getAngle(x, y)
-    return math.atan((y - self.y) / (x - self.x))
+    return math.atan2((y - self.y), (x - self.x))
 end
 
 return Player

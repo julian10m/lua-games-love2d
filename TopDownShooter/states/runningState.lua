@@ -4,7 +4,7 @@ local Zombie = require("characters.zombie")
 
 ---@class RunningState
 local RunningState = {}
-RunningState.timer = maxTime
+RunningState.zombieMaxSpawnTime = ZOMBIE_MAX_SPAWN_TIME
 RunningState.score = 0
 
 ---Constructor
@@ -14,6 +14,7 @@ function RunningState:new()
     state.player = Player:new()
     state.zombies = {}
     state.bullets = {}
+    state.timer = self.zombieMaxSpawnTime
     setmetatable(state, self)
     self.__index = self
     return state
@@ -23,16 +24,12 @@ end
 ---@param game Game
 ---@param dt number
 function RunningState:update(game, dt)
-    for key, key_action in pairs(movements) do
-        if love.keyboard.isDown(key) then
-            self.player[key_action.dir] = self.player[key_action.dir] + key_action.delta * self.player.speed * dt
-        end
-    end
+    self.player:update(dt)
     for i, z in ipairs(self.zombies) do
         local angle = math.pi + self.player:getAngle(z.x, z.y)
         z.x = z.x + z.speed * math.cos(angle) * dt
         z.y = z.y + z.speed * math.sin(angle) * dt
-        if distanceBetween(z.x, z.y, self.player.x, self.player.y) < MIN_DIST then
+        if distanceBetween(z.x, z.y, self.player.x, self.player.y) < MIN_COLLISION_DISTANCE then
             game:updateHighestScore(self.score)
             game:setFinishedState(self.score)
         end
@@ -47,7 +44,7 @@ function RunningState:update(game, dt)
         else
             for j = #self.zombies, 1, -1 do
                 local z = self.zombies[j]
-                if distanceBetween(z.x, z.y, b.x, b.y) < MIN_DIST then
+                if distanceBetween(z.x, z.y, b.x, b.y) < MIN_COLLISION_DISTANCE then
                     table.remove(self.zombies, j)
                     table.remove(self.bullets, i)
                     self.score = self.score + 1
@@ -59,8 +56,8 @@ function RunningState:update(game, dt)
     self.timer = self.timer - dt
     if self.timer <= 0 then
         table.insert(self.zombies, Zombie:new())
-        maxTime = 0.95 * maxTime
-        self.timer = maxTime
+        self.zombieMaxSpawnTime = 0.95 * self.zombieMaxSpawnTime
+        self.timer = self.zombieMaxSpawnTime
     end
 end
 
@@ -82,7 +79,7 @@ function RunningState:handleShooting(x, y, deltaScore, deltaTimer)
     if self.target:isHit(x, y) then
         self:placeNewTarget()
         self.score = self.score + deltaScore
-        self.timer = self.timer - deltaTimer
+        self.zombieMaxSpawnTime = self.zombieMaxSpawnTime - deltaTimer
     else
         if self.score > 0 then
             self.score = self.score - 1
@@ -107,7 +104,7 @@ function RunningState:draw(highestScore)
     for _, bullet in ipairs(self.bullets) do
         bullet:draw()
     end
-    graphics.printf("Score: " .. score, 0, graphics.getHeight() - 100, graphics.getWidth(), "center")
+    graphics.printf("Score: " .. self.score, 0, graphics.getHeight() - 100, graphics.getWidth(), "center")
 end
 
 return RunningState

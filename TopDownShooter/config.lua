@@ -11,10 +11,8 @@ movements = {
 mouse = {}
 mouse.leftClick = 1
 
-MIN_DIST = 30
-maxTime = 1
-gameState = 1
-score = 0
+MIN_COLLISION_DISTANCE = 30
+ZOMBIE_MAX_SPAWN_TIME = 2
 
 sprites = {}
 sprites.background = graphics.newImage('sprites/background.png')
