@@ -19,11 +19,10 @@ end
 ---Draws the menu.
 ---@param highestScore? number
 function MenuState:draw(highestScore)
-    local welcomeMsg = "Click anywhere to begin!"
-    if highestScore then welcomeMsg = "The highest score so far is " ..
-            highestScore .. "\nThink you can beat it? ;)\n\n" .. welcomeMsg
+    graphics.printf("Click anywhere to begin!", 0, 50, graphics.getWidth(), "center")
+    if highestScore then
+        graphics.printf("\nHighest score: " .. highestScore, 0, graphics.getHeight() - 100, graphics.getWidth(), "center")
     end
-    graphics.printf(welcomeMsg, 0, 50, graphics.getWidth(), "center")
 end
 
 return MenuState
