@@ -28,8 +28,8 @@ end
 ---@param highestScore? number
 function MenuState:draw(highestScore)
     local welcomeMsg = "Click anywhere to begin!"
-    if highestScore then welcomeMsg = "The highest score so far is " ..
-            highestScore .. "\nThink you can beat it? ;)\n\n" .. welcomeMsg
+    if highestScore then
+        welcomeMsg = welcomeMsg .. "\n\nHighest score: " .. highestScore
     end
     graphics.printf(welcomeMsg, 0, graphics.getHeight() / 2, graphics.getWidth(), "center")
 end
